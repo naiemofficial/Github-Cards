@@ -1,0 +1,213 @@
+.github-card {
+    font-family: 'Alliance No.1', sans-serif;
+    width: 1200px;
+    height: 600px;
+    aspect-ratio: 12 / 6;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.github-card-header {
+    padding: 80px 80px 0;
+}
+.github-card-header,
+.github-card-footer-wrapper {
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 145px;
+    align-items: stretch;
+}
+.github-card-title {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+}
+.github-card-title,
+.github-card-stats {
+    flex: 1;
+}
+
+.github-card-title h3 {
+    margin: 0;
+    font-size: 60px;
+    color: #2f363d;
+    margin-top: 4px;
+}
+
+.github-card-title h3 strong {
+    margin-left: -3px;;
+}
+
+.github-card-title p {
+    font-size: 28px;
+    color: #6e7681;
+    margin: 0;
+    font-weight: 500;
+}
+
+.github-card-user,
+.github-card-badges {
+    width: 200px;
+
+}
+
+.github-card-header .github-card-avatar {
+}
+
+.github-card-header .github-card-avatar img {
+    width: 100%;
+    height: auto;
+    border-radius: 25px;
+    object-fit: cover;
+}
+
+.github-card-footer {
+    display: flex;
+    flex-direction: column;
+}
+.github-card-footer-wrapper {
+    padding: 0 80px 50px;
+    flex: 1;
+}
+
+.github-card-stats {
+    display: flex;
+    /* justify-content: space-between; */
+    /* padding-right: 40px; */
+    gap: 43px;
+}
+
+.github-card-stat {
+    display: inline-flex;
+    gap: 11px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.github-card-stat i {
+    display: block;
+    font-size: 30px;
+    color: #6e7681;
+}
+
+.github-card-stat .count {
+    font-weight: 500;
+    font-size: 30px;
+    color: #2f363d;
+}
+
+.github-card-stat-text {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+    line-height: 1;
+    color: #6e7681;
+}
+
+
+.github-card-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.github-card-badges > *,
+.github-card-badges a,
+.github-card-badges a:hover {
+    color: #8492af;
+}
+
+.github-card-badges i {
+    font-size: 46px;
+}
+
+
+.language-ribbon {
+    height: 24px;
+    min-height: 24px;
+    background: #8492af;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Scale */
+.github-card-wrapper {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+
+    /* Set the max width to match original 1200px design */
+    max-width: 1200px;
+}
+
+/* SCALE the card based on available wrapper width */
+.github-card-wrapper .github-card {
+    transform-origin: top left;
+}
+@media (max-width: 1200px) {
+    .github-card-wrapper .github-card {
+        transform: scale(calc(min(1, 100vw / 1200px)));
+        width: 1200px; /* keep original width for scale calculation */
+        height: auto;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.-mr-5{
+    margin-right: -5px;
+}
+
+.ml-10{
+    margin-left: 10px;
+}
+
+.ml-12 {
+    margin-left: 12px;
+}
