@@ -4,6 +4,8 @@ function fn_github_card_template($atts)
     ob_start();
 ?>
 
+ <?php echo get_option('github_card_wrapper_preloader'); ?>
+
     <div class="github-card-wrapper">
         <div class="github-card">
             <div class="github-card-header">

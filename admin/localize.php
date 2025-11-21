@@ -3,8 +3,7 @@
 /**
  * Enqueue admin CSS
  */
-function github_card_admin_style($hook)
-{
+function github_card_admin_style($hook){
     if ($hook !== 'toplevel_page_github-card-settings') return;
 
     wp_enqueue_style(
