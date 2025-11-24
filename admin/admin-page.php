@@ -25,7 +25,7 @@ add_action('admin_init', 'github_card_register_settings');
 function github_card_add_menu_page()
 {
 
-    $icon_url = plugin_dir_url(__DIR__) . '/admin/assets/icon/github-card.svg';
+    $icon_url = plugin_dir_url(__DIR__) . '/admin/assets/icons/github-card.svg';
 
     add_menu_page(
         'Github Card',
@@ -50,135 +50,143 @@ function github_card_render_admin_page()
     $load_with = get_option('github_card_load_with', 'php');
 ?>
 
-    <div class="github-card-admin wrap">
-        <h1>Github Card Settings</h1>
+    <div class="github-card-admin wrap max-w-4xl mx-auto py-8 animate-fade-in">
 
-        <form method="post" action="options.php">
+        <h1 class="github-card-admin-heading">Github Card Settings</h1>
+        <div class="github-card-banner-wrapper">
+            <img src="<?php echo plugin_dir_url(__DIR__); ?>admin/assets/icons/github-card.svg" alt="Github Card Banner" class="admin-settings-banner" />
+        </div>
+        <form method="post" action="options.php" class="space-y-10">
             <?php settings_fields('github_card_settings_group'); ?>
 
-            <div class="gc-section">
-                <h2>Card Settings</h2>
+            <!-- SECTION: Card Settings -->
+            <div class="bg-white shadow border rounded-lg p-6 space-y-6 animate-fade-in-up">
+                <h2 class="text-xl font-semibold border-b pb-2">Card Settings</h2>
 
-                <?php // --------------- Load With ------------------
+                <!-- Load With -->
+                <?php
                 $key = 'github_card_load_with';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
                 $load_with = get_option($key, $input['default']);
                 $values = $input['values'];
                 ?>
-                <label class="gc-label"><?php echo esc_html($label); ?></label>
-                <div class="gc-radio-row">
-                    <?php foreach ($values as $value_key => $text) { ?>
-                        <label>
-                            <input
-                                type="radio"
-                                name="<?php echo esc_attr($key); ?>"
-                                value="<?php echo esc_attr($value_key); ?>"
-                                <?php checked($load_with, $value_key); ?>>
-                            <?php echo esc_html($text); ?>
-                        </label>
-                    <?php } ?>
-                </div>
-
-
-
-
-
-
-
-
-                <div class="gc-conditional" data-condition="js">
-                    <?php // --------------- Preloader Type ------------------ 
-                    $key = 'github_card_preloader_type';
-                    $input = $all_input_settings[$key];
-                    $label = $input['label'];
-                    $preloader_type = get_option($key, $input['default']);
-                    $values = $input['values'];
-                    ?>
-                    <label class="gc-label"><?php echo esc_html($label); ?></label>
-                    <select name="github_card_preloader_type">
-                        <?php foreach ($values as $value) { ?>
-                            <option value="<?php echo esc_attr($value); ?>" <?php selected($preloader_type, $value); ?>>
-                                <?php echo esc_html(ucfirst($value)); ?>
-                            </option>
+                <div class="animate-fade-in-up">
+                    <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
+                    <div class="flex gap-6">
+                        <?php foreach ($values as $value_key => $text) { ?>
+                            <label class="flex items-center gap-2 cursor-pointer animate-fade-in">
+                                <input
+                                    type="radio"
+                                    name="<?php echo esc_attr($key); ?>"
+                                    value="<?php echo esc_attr($value_key); ?>"
+                                    class="h-4 w-4 text-[#141414] border-[#141414] checked:bg-[#141414] checked:border-[#141414]"
+                                    <?php checked($load_with, $value_key); ?>>
+                                <span><?php echo esc_html($text); ?></span>
+                            </label>
                         <?php } ?>
-                    </select>
-
-
-
-                    <?php // --------------- Wrapper Preloader ------------------ 
-                    $key = 'github_card_wrapper_preloader';
-                    $input = $all_input_settings[$key];
-                    $label = $input['label'];
-                    $wrapper_preloader = get_option($key, $input['default']);
-                    ?>
-                    <label class="gc-label">
-                    <label class="gc-switch">
-                        <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" <?php checked($wrapper_preloader, 'on'); ?> >
-                        <span></span>
-                    </label>
-                    
-
-
-                    <?php // --------------- Repo Counts Preloader ------------------
-                    $key = 'github_card_counts_preloader';
-                    $input = $all_input_settings[$key];
-                    $label = $input['label'];
-                    $counts_preloader = get_option($key, $input['default']);
-                    ?>
-                    <label class="gc-label"></label>
-                    <label class="gc-switch">
-                        <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" <?php checked($counts_preloader, 'on'); ?> >
-                        <span></span>
-                    </label>
+                    </div>
                 </div>
-                
+
+                <!-- Conditional Section -->
+                <div class="space-y-6 animate-fade-in-up">
+                    <div class="space-y-6 gc-conditional" data-condition="js">
+                        <!-- Preloader Type -->
+                        <?php
+                            $key = 'github_card_preloader_type';
+                            $input = $all_input_settings[$key];
+                            $label = $input['label'];
+                            $preloader_type = get_option($key, $input['default']);
+                            $values = $input['values'];
+                        ?>
+                        <div class="animate-fade-in-up">
+                            <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
+                            <select
+                                name="github_card_preloader_type"
+                                class="border rounded-lg px-3 py-2 w-48 focus:ring-[#141414] focus:border-[#141414]">
+                                <?php foreach ($values as $value) { ?>
+                                    <option value="<?php echo esc_attr($value); ?>" <?php selected($preloader_type, $value); ?>>
+                                        <?php echo esc_html(ucfirst($value)); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                        <!-- Switches -->
+                        <?php
+                        $switch_keys = ['github_card_wrapper_preloader', 'github_card_counts_preloader'];
+                        foreach ($switch_keys as $key) {
+                            $input = $all_input_settings[$key];
+                            $label = $input['label'];
+                            $value = get_option($key, $input['default']);
+                        ?>
+                            <div class="flex items-center justify-between animate-fade-in-up">
+                                <label class="font-medium"><?php echo esc_html($label); ?></label>
+                                <label class="relative inline-flex items-center cursor-pointe checkbox-label">
+                                    <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($value, 'on'); ?> />
+                                    <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
+                                    <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
+                                </label>
+                            </div>
+                        <?php } ?>
+                    </div>
 
 
 
-                <?php // --------------- Auto Scale ------------------
-                $key = 'github_card_auto_scale';
-                $input = $all_input_settings[$key];
-                $label = $input['label'];
-                $auto_scale = get_option($key, $input['default']);
-                ?>
-                <label class="gc-label"></label>
-                <label class="gc-switch">
-                    <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" <?php checked($auto_scale, 'on'); ?> >
-                    <span></span>
-                </label>
+                    <!-- Auto Scale -->
+                    <?php
+                        $key = 'github_card_auto_scale';
+                        $input = $all_input_settings[$key];
+                        $label = $input['label'];
+                        $value = get_option($key, $input['default']);
+                    ?>
+                    <div class="flex items-center justify-between animate-fade-in-up">
+                        <label class="font-medium"><?php echo esc_html($label); ?></label>
+                        <label class="relative inline-flex items-center cursor-pointe checkbox-label">
+                            <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($value, 'on'); ?> />
+                            <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
+                            <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
+                        </label>
+                    </div>
+                </div>
+
             </div>
 
+            <!-- Cache Section -->
+            <div class="bg-white shadow border rounded-lg p-6 space-y-6 animate-fade-in-up">
+                <h2 class="text-xl font-semibold border-b pb-2">Cache Settings</h2>
 
-            <div class="gc-section">
-                <h2>Cache Setting</h2>
-
-                <?php // --------------- Cache Enabled ------------------
+                <?php
                 $key = 'github_card_cache_enabled';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
                 $cache_enabled = get_option($key, $input['default']);
                 ?>
-                <label class="gc-label">
-                <label class="gc-switch">
-                    <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" <?php checked($cache_enabled, 'on'); ?> >
-                    <span></span>
-                </label>
+                <div class="flex items-center justify-between animate-fade-in">
+                    <label class="font-medium"><?php echo esc_html($label); ?></label>
+                    <label class="relative inline-flex items-center cursor-pointer checkbox-label">
+                        <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($cache_enabled, 'on'); ?> />
+                        <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
+                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
+                    </label>
+                </div>
 
-
-                <?php // --------------- Cache Duration ------------------
+                <?php
                 $key = 'github_card_cache_duration';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
-
                 ?>
-                <label class="gc-label"><?php echo esc_html($label); ?></label>
-                <input type="number" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr(get_option($key, $input['default'])); ?>" min="1">
+                <div class="animate-fade-in-up">
+                    <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
+                    <input type="number" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr(get_option($key, $input['default'])); ?>" min="1" class="border rounded-lg px-3 py-2 w-32 focus:ring-[#141414] focus:border-[#141414]">
+                </div>
             </div>
 
-            <?php submit_button(); ?>
+            <button type="submit" class="save-github-card-settings">Save Settings</button>
         </form>
     </div>
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -197,5 +205,4 @@ function github_card_render_admin_page()
         });
     </script>
 
-<?php
-}
+<?php }

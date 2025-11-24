@@ -5,7 +5,7 @@ require_once plugin_dir_path(__FILE__) . '../api/linguist.php';
 
 
 
-function get_github_linguist_cached($atts) {
+function get_github_linguist_cached() {
     $cache_key = 'github_linguist';
 
     // Check if cached

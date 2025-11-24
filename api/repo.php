@@ -1,6 +1,6 @@
 <?php
 
-function get_github_stats($repo_full) {
+function get_github_repo_data($repo_full) {
     // Build API endpoints
     $repo_api           = "https://api.github.com/repos/{$repo_full}";
     $contributors_api   = "https://api.github.com/repos/{$repo_full}/contributors";
@@ -53,43 +53,27 @@ function get_github_stats($repo_full) {
     // Programming languages (%)
     // --------------------------
     $languages_data = github_safe_get($languages_api);
-    $languages = [];
-
-    if (!is_wp_error($languages_data) && is_array($languages_data)) {
-        $total_bytes = array_sum($languages_data);
-
-        $linguist_data = get_github_linguist_cached([]);
-
-        if ($total_bytes > 0) {
-            foreach ($languages_data as $lang => $bytes) {
-                $percentage = round(($bytes / $total_bytes) * 100, 1);
-                $languages[$lang] = [
-                    'percentage' => $percentage,
-                    'bytes' => $bytes,
-                    'color' => $linguist_data[$lang] ?? null,
-                ];
-            }
-        }
-    }
+	
+	
 
     // --------------------------
     // Final return array
     // --------------------------
-    $stats = [
-        'stars'        => $repo_data['stargazers_count'] ?? 0,
-        'forks'        => $repo_data['forks_count'] ?? 0,
-        'open_issues'  => $repo_data['open_issues_count'] ?? 0,
-        'all_issues'   => $issues_total,
-        'contributors' => $contributors_total,
-        'languages'    => $languages,
-    ];
+	$repo_data = array_merge($repo_data, [
+		'stars'        => $repo_data['stargazers_count'] ?? 0,
+		'forks'        => $repo_data['forks_count'] ?? 0,
+		'open_issues'  => $repo_data['open_issues_count'] ?? 0,
+		'all_issues'   => $issues_total,
+		'contributors' => $contributors_total,
+		'languages'    => $languages_data,
+	]);
     // ----------- END - Porcess data -----------
 
-    return $stats;
+    return $repo_data;
 }
 
 
 
-function load_github_stats($repo_full) {
-    return get_github_stats($repo_full);
+function load_github_repo_data($repo_full) {
+    return get_github_repo_data($repo_full);
 }

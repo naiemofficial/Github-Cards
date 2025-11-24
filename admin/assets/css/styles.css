@@ -1,3 +1,24 @@
+.admin-settings-banner {
+    border: 0;
+    width: 300px;
+    opacity: 0.4;
+}
+
+.github-card-banner-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 15px;
+}
+
+.github-card-admin .github-card-admin-heading {
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-family: 'Alliance No.1', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 .github-card-admin {
     background: #fff;
     padding: 20px;
@@ -67,4 +88,52 @@
     border-left: 3px solid #eee;
     margin-top: 15px;
     display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+input[type=checkbox].peer:checked + div {
+    background-color: #141414;
+}
+input[type=checkbox].peer + div + span.peer-checked {
+    position: absolute;
+}
+input[type=checkbox].peer:checked + div + span.peer-checked {
+    transform: translateX(16px);
+}
+.save-github-card-settings {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #141414;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.github-card-admin .checkbox-label {
+    cursor: pointer;
+}
+.github-card-admin .checkbox-label > div.peer-checked {
+    box-shadow: 0 1px 4px 2px #00000021
+}
+.save-github-card-settings:hover {
+    background-color: rgb(59, 59, 59);
 }

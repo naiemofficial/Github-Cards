@@ -59,30 +59,36 @@ function github_card_preloader_type() {
 function github_card_wrapper_preloader() {
     global $defaults;
     $key = 'github_card_wrapper_preloader';
-    return get_option($key, $defaults[$key]);
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 function github_card_counts_preloader() {
     global $defaults;
     $key = 'github_card_counts_preloader';
-    return get_option($key, $defaults[$key]);
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 function github_card_auto_scale() {
     global $defaults;
     $key = 'github_card_auto_scale';
-    return get_option($key, $defaults[$key]);
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 function github_card_cache_enabled() {
     global $defaults;
     $key = 'github_card_cache_enabled';
-    return get_option($key, $defaults[$key]);
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 function github_card_cache_duration() {
     global $defaults;
     $key = 'github_card_cache_duration';
-    return get_option($key, $defaults[$key]);
+    return intval(get_option($key, $defaults[$key]));
 }
 // ------------------ END - Option Getters ---------------- //
+
+
+
+function get_or_null($array, $key){
+	return is_array($array) && isset($array[$key]) ? $array[$key] : null;
+}

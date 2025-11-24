@@ -49,6 +49,16 @@
     color: #6e7681;
     margin: 0;
     font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.github-card-title p.error {
+    font-size: 18px;
+    -webkit-line-clamp: 6;
+    font-weight: 400;
 }
 
 .github-card-user,
@@ -135,62 +145,6 @@
     min-height: 24px;
     background: #8492af;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Scale */
-.github-card-wrapper {
-    width: 100%;
-    height: auto;
-    position: relative;
-    overflow: hidden;
-
-    /* Set the max width to match original 1200px design */
-    max-width: 1200px;
-}
-
-/* SCALE the card based on available wrapper width */
-.github-card-wrapper .github-card {
-    transform-origin: top left;
-}
-@media (max-width: 1200px) {
-    .github-card-wrapper .github-card {
-        transform: scale(calc(min(1, 100vw / 1200px)));
-        width: 1200px; /* keep original width for scale calculation */
-        height: auto;
-    }
-}
-
-
-
 
 
 

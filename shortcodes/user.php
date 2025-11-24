@@ -2,17 +2,18 @@
 /** Register shortcode for GitHub profile data */
 
 
-function github_user_cached($atts, $shortcode = false){
+function github_user_cached($atts, $shortcode = true){
     if (!isset($atts['username']) || empty($atts['username'])) {
         return "Missing username attribute";
     }
 
     // Get user data
-    $user_data = get_github_user_data_cached($atts['username']);
+	$username = $atts['username'] ?? null;
+    $user_data = get_github_user_data_cached($username);
     
     // Check errors
     if(!$user_data) return 'Error: empty data - (Ref: S>U)';
-    if($user_data instanceof WP_Error) return json_encode($user_data);
+    if($user_data instanceof WP_Error) $shortcode ? json_encode($user_data) : $user_data;
 
 
 
@@ -26,8 +27,19 @@ function github_user_cached($atts, $shortcode = false){
 }
 
 
+
+function assign_user_data_to_repo($atts){
+	$repo = isset($atts['repo']) ? esc_attr($atts['repo']) : '/';
+	$exploded_repo = explode('/', trim($repo, '/'));
+	$username = isset($exploded_repo[0]) ? $exploded_repo[0] : $repo;
+	$user = github_user_cached(['username' => $username], false);
+	
+	return $user;
+}
+
+
 function fn_github_user($atts){
-    return github_user_cached($atts, true);
+    return github_user_cached($atts);
 }
 
 
