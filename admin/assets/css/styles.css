@@ -1,3 +1,8 @@
+.github-card-admin-page {
+    background-color: #dfe3eb;
+}
+
+
 .admin-settings-banner {
     border: 0;
     width: 300px;
@@ -20,7 +25,6 @@
 }
 
 .github-card-admin {
-    background: #fff;
     padding: 20px;
     border-radius: 8px;
 }
@@ -87,7 +91,6 @@
     padding-left: 15px;
     border-left: 3px solid #eee;
     margin-top: 15px;
-    display: none;
 }
 
 
@@ -120,20 +123,79 @@ input[type=checkbox].peer + div + span.peer-checked {
 input[type=checkbox].peer:checked + div + span.peer-checked {
     transform: translateX(16px);
 }
-.save-github-card-settings {
+.save-github-card-settings,
+.reset-github-card-settings {
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: 4px;
     background-color: #141414;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
 }
+.save-github-card-settings:hover {
+    background-color: rgb(59, 59, 59);
+}
+
+
+.reset-github-card-settings {
+    background-color: #fff;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+}
+.reset-github-card-settings:not([disabled]):hover {
+    background-color: #ff0000;
+    color: #fff;
+}
+.reset-github-card-settings:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .github-card-admin .checkbox-label {
     cursor: pointer;
 }
 .github-card-admin .checkbox-label > div.peer-checked {
     box-shadow: 0 1px 4px 2px #00000021
 }
-.save-github-card-settings:hover {
-    background-color: rgb(59, 59, 59);
+
+
+
+
+.github-card-admin input[type=radio]:checked::before {
+    border-color: #000000;
+    background-color: #000000;
+}
+.github-card-admin input[type=radio]:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000;
+    outline: 2px solid transparent;
+}
+.github-card-admin .github_card_spinner .options {}
+.github-card-admin .github_card_spinner .options {}
+.github-card-admin .github_card_spinner .options input[type=radio] {
+    position: absolute;
+    opacity: 0;
+    margin: 0;
+    border: 0;
+}
+.github-card-admin .github_card_spinner .options label {}
+.github-card-admin .github_card_spinner .options span {
+    height: 24px;
+    width: 24px;
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    transition: 0.3s;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    box-shadow: 0 1px 4px 2px #00000010;
+}
+.github-card-admin .github_card_spinner .options input[type=radio]:not(:checked) + span:hover {
+    box-shadow: 0 1px 4px 2px #00000021;
+}
+.github-card-admin .github_card_spinner .options input[type=radio]:checked + span {
+    background: #000000;
+    color: #ffffff;
 }

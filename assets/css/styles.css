@@ -68,6 +68,7 @@
 }
 
 .github-card-header .github-card-avatar {
+    position: relative;
 }
 
 .github-card-header .github-card-avatar img {
@@ -75,6 +76,20 @@
     height: auto;
     border-radius: 25px;
     object-fit: cover;
+}
+
+
+.avatar-preloader {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-content: center;
+    justify-content: center;
+    align-items: center; 
+    top: 0;
+    font-size: 45px;
+    color: #8492b0;
 }
 
 .github-card-footer {
@@ -146,6 +161,12 @@
     background: #8492af;
 }
 
+.ribbon-space {
+    height: 24px;
+    min-height: 24px;
+    background: transparent;
+}
+
 
 
 
@@ -164,4 +185,52 @@
 
 .ml-12 {
     margin-left: 12px;
+}
+
+
+
+
+.github-card-wrapper-preloader {
+    position: absolute;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.26);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    color: #8492b0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Skeleton */
+.skeleton-heading, .skeleton-description, .skeleton-avatar, .skeleton-counts, .skeleton-ribbon {
+    background-color: #e2e5e7;
+    border-radius: 4px; 
+    margin: 5px 0;
+    animation: loading-shimmer 1.5s infinite linear;
+    background: linear-gradient(to right, #e2e5e7 8%, #f2f2f2 18%, #e2e5e7 33%);
+    background-size: 1000px 100%; 
+}
+/* Shimmer Animation */
+@keyframes loading-shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
 }

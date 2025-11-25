@@ -50,27 +50,62 @@ function github_card_load_with() {
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_preloader_type() {
+function github_card_wrapper_preloader() {
+    if (github_card_load_with() === 'php') {
+        return null;
+    }
+    
+    global $defaults;
+    $key = 'github_card_wrapper_preloader';
+    $value = filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+    if ($value) {
+        update_option('github_card_data_preloader', false);
+    }
+    return $value;
+}
+
+function github_card_preloader_type(){
+    if(in_array(github_card_wrapper_preloader(), [null, false], true)){
+        return null;
+    }
+
     global $defaults;
     $key = 'github_card_preloader_type';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_wrapper_preloader() {
+function github_card_data_preloader() {
     global $defaults;
-    $key = 'github_card_wrapper_preloader';
-    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
-}
-
-function github_card_counts_preloader() {
-    global $defaults;
-    $key = 'github_card_counts_preloader';
+    $key = 'github_card_data_preloader';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 function github_card_auto_scale() {
     global $defaults;
     $key = 'github_card_auto_scale';
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+}
+
+
+function github_card_spinner() {
+    global $defaults;
+    $key = 'github_card_spinner';
+    return get_option($key, $defaults[$key]);
+}
+
+function github_card_footer_ribbon() {
+    global $defaults;
+    $key = 'github_card_footer_ribbon';
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+}
+
+function github_card_language_ribbon() {
+    if(!github_card_footer_ribbon()) {
+        return false;
+    }
+    
+    global $defaults;
+    $key = 'github_card_language_ribbon';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
@@ -81,6 +116,10 @@ function github_card_cache_enabled() {
 }
 
 function github_card_cache_duration() {
+    if(!github_card_cache_enabled()){
+        return 0;
+    }
+    
     global $defaults;
     $key = 'github_card_cache_duration';
     return intval(get_option($key, $defaults[$key]));

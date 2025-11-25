@@ -9,9 +9,12 @@ function get_github_user_data_cached($username) {
     $transient_key = 'github_user_' . md5($username);
 
     // Check if cached
-    $cached_user = get_transient($transient_key);
-    if ($cached_user !== false) {
-        return $cached_user;
+    $cache_enabled = github_card_cache_enabled();
+    if ($cache_enabled) {
+        $cached_user = get_transient($transient_key);
+        if ($cached_user !== false) {
+            return $cached_user;
+        }
     }
 
     // Load from API
@@ -20,8 +23,12 @@ function get_github_user_data_cached($username) {
     // Don't cache if any error
     if ($user_data instanceof WP_Error) return $user_data;
 
-    // Cache for 6 hour
-    set_transient($transient_key, $user_data, 6 * HOUR_IN_SECONDS);
+    // Cache it
+    if($cache_enabled){
+        $cache_duration = github_card_cache_duration();
+        set_transient($transient_key, $user_data, $cache_duration);
+    }
+    
     return $user_data;
 }
 

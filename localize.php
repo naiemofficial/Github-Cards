@@ -1,37 +1,42 @@
 <?php
 
+// Enqueue Styles and Scripts
+function github_card_enqueue_styles_script(){
 
-// Enque Styles
-function github_card_enqueue_styles() {
-    wp_enqueue_style( 'github-card-css',  plugin_dir_url(__FILE__) . 'assets/css/styles.css', [], '1.0' );
-    wp_enqueue_style('font-alliance-no-1', plugin_dir_url(__FILE__) . 'assets/css/fonts.css', [], '1.0' );
+    // ----------------- STYLES ----------------- //
+    wp_enqueue_style('github-card-css', plugin_dir_url(__FILE__) . 'assets/css/styles.css', [], '1.0');
+    wp_enqueue_style('font-alliance-no-1', plugin_dir_url(__FILE__) . 'assets/css/fonts.css', [], '1.0');
 
     // Font Awesome
-    if(!wp_style_is('font-awesome', 'enqueued')){
+    if (wp_style_is('font-awesome', 'enqueued')) {
         wp_dequeue_style('font-awesome');
         wp_deregister_style('font-awesome');
     }
-    wp_enqueue_style( 'font-awesome', plugin_dir_url(__FILE__) . 'libs/fontawesome/css/all.min.css', [], '7.1.0' );
+    wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . 'libs/fontawesome/css/all.min.css', [], '7.1.0');
+
+    // ----------------- SCRIPTS ----------------- //
+    wp_enqueue_script('github-card-repo-script', plugin_dir_url(__FILE__) . 'assets/js/github-card.js', [], '1.0', true);
 
 
+    // Localize data for AJAX
+    if (github_card_load_with() === 'js') {
+        $data = [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('github_card_repo_nonce'),
+        ];
 
+        wp_add_inline_script('github-card-repo-script', 'var githubCardRepo = ' . wp_json_encode($data) . ';');
 
+        // Enqueue the dummy script after adding inline data
+        wp_enqueue_script('github-card-repo-script');
 
-    // ----------------- START - Conditional Styles ----------------- //
-    // Load With (php/js)
-    if(github_card_load_with() === 'js'){
-        function github_card_enqueue_stats_script() {
-            wp_localize_script( 'github-card-js', 'githubCard', ['ajaxurl' => admin_url('admin-ajax.php')] );
-        }
-        add_action('wp_enqueue_scripts', 'github_card_enqueue_stats_script');
+        // Include your PHP JS code
         include plugin_dir_path(__FILE__) . 'includes/load_with_js.php';
     }
 
-
     // Auto Scale
-    if(github_card_auto_scale()){
+    if (github_card_auto_scale()) {
         include plugin_dir_path(__FILE__) . 'includes/auto-scale.php';
     }
-    // ------------------ END - Conditional Styles ------------------ //
 }
-add_action('wp_enqueue_scripts', 'github_card_enqueue_styles');
+add_action('wp_enqueue_scripts', 'github_card_enqueue_styles_script');
