@@ -15,7 +15,7 @@ function github_repo_data_cached($atts, $field, $shortcode = true){
 
     // Check errors
     if (!$repo_data) return 'Error: empty data - (Ref: S>S)';
-    if ($repo_data instanceof WP_Error) return $shortcode ? $repo_data : json_encode($repo_data);
+    if ($repo_data instanceof WP_Error) return $shortcode ? json_encode($repo_data) : $repo_data;
 
 
 
@@ -71,9 +71,9 @@ function fn_github_repo_data($atts, $field){
 
 function full_github_repo_data($atts){
 	$repo_data = github_repo_data_cached($atts, 'full_info', false);
-	
+
 	assign_color_to_repo_languages($repo_data);
-	
+    
 	if(!is_wp_error($repo_data) && is_array($repo_data)){
 		$repo_data['user'] = assign_user_data_to_repo($atts);
 	}

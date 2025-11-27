@@ -199,3 +199,111 @@ input[type=checkbox].peer:checked + div + span.peer-checked {
     background: #000000;
     color: #ffffff;
 }
+
+
+
+
+input[type=text],
+input[type=number] {
+    transition: 0.05s;
+}
+input[type=text]:focus,
+input[type=number]:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #000000;
+}
+input[type=text]:focus-visible,
+input[type=number]:focus-visible {
+    outline: 2px solid #000000;
+    box-shadow: 0 0 0 1px #00000075;
+}
+input[type=text]:hover,
+input[type=number]:hover {
+    box-shadow: 0 0 0 1px #00000025;
+}
+input[type=text]:disabled,
+input[type=number]:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+input[type=text]::placeholder,
+input[type=number]::placeholder {
+    color: #a0a0a0;
+}
+
+
+
+
+/* 
+* WordPress Color Picker Styles
+*/
+.github-card-admin .wp-picker-container {
+    position: relative;
+}
+.github-card-admin .wp-picker-container .wp-color-result.button {
+    border: 0;
+}
+.github-card-admin .wp-picker-container .wp-color-result.button:hover {
+    
+}
+.github-card-admin .wp-picker-container .wp-color-result.button:focus {
+    outline: 2px solid #000000;
+}
+.github-card-admin .wp-picker-container .wp-color-result.button:focus-visible {
+    outline: 2px solid #000000;
+}
+.github-card-admin .wp-picker-container .wp-color-result-text {
+    border-right-width: 0;
+    width: calc(100% - 1px);
+}
+.github-card-admin .wp-picker-holder {
+    position: absolute;
+    z-index: 5;
+    top: 30px;
+}
+.github-card-admin .wp-picker-holder .iris-picker {
+    box-shadow: 0 4px 8px 0 #00000020;
+}
+.github-card-admin .wp-picker-clear {
+    color: #000000;
+    border-color: #000000;
+    background-color: #eeeeee;
+    transition: 0.2s;
+}
+.github-card-admin .wp-picker-clear:hover {
+    color: #ff0000;
+    border-color: #ff0000;
+    background-color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.min-h-32px {
+    min-height: 32px;
+}

@@ -9,7 +9,6 @@ function get_github_repo_data($repo_full) {
 
     // Fetch repo basic info
     $repo_data = github_safe_get($repo_api);
-    
     // If error, don't process data; just return
     if (is_wp_error($repo_data)) return $repo_data;
 
@@ -68,6 +67,8 @@ function get_github_repo_data($repo_full) {
 		'languages'    => $languages_data,
 	]);
     // ----------- END - Porcess data -----------
+
+    
 
     return $repo_data;
 }

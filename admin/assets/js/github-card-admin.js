@@ -1,4 +1,19 @@
+// WP Color Picker Initialization
+jQuery(document).ready(function($) {
+    $('.github-card-color-field').each(function(){
+        const hasAlpha = $(this).data('alpha') === true || $(this).data('alpha') === 'true' || Boolean($(this).data('alpha'));
+        $(this).wpColorPicker({
+            alpha: true
+        });
+    });
+});
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
+    // Conditional Visibility
     function updateVisibility() {
         // Load with
         const loadWith = document.querySelector("input[name='github_card_load_with']:checked").value;
@@ -41,6 +56,27 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         document.querySelectorAll("[data-condition='data-preloader-off']").forEach(el => {
             if (dataPreloaderOn) {
+                el.classList.add("hidden");
+            } else {
+                el.classList.remove("hidden");
+            }
+        });
+
+
+
+        // Enable Preloader
+        const enablePreloaderBlurCheckbox = document.querySelector("input[name='github_card_enable_preloader_blur']");
+        const enablePreloaderBlurOn = enablePreloaderBlurCheckbox.checked;
+        document.querySelectorAll("[data-condition='enable-preloader-blur-on']").forEach(el => {
+            if(enablePreloaderBlurOn){
+                el.classList.remove("hidden");
+            } else {
+                el.classList.add("hidden");
+            }
+            
+        });
+        document.querySelectorAll("[data-condition='enable-preloader-blur-off']").forEach(el => {
+            if (enablePreloaderBlurOn) {
                 el.classList.add("hidden");
             } else {
                 el.classList.remove("hidden");

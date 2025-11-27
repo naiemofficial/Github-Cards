@@ -33,7 +33,8 @@
     flex: 1;
 }
 
-.github-card-title h3 {
+.github-card-title h3,
+.github-card-title h3 a {
     margin: 0;
     font-size: 60px;
     color: #2f363d;
@@ -64,17 +65,18 @@
 .github-card-user,
 .github-card-badges {
     width: 200px;
-
 }
 
 .github-card-header .github-card-avatar {
     position: relative;
+    width: 100%;
+    height: auto;
+    display: inline-flex;
+    border-radius: 25px;
+    overflow: hidden;
 }
 
 .github-card-header .github-card-avatar img {
-    width: 100%;
-    height: auto;
-    border-radius: 25px;
     object-fit: cover;
 }
 
@@ -150,12 +152,23 @@
     color: #8492af;
 }
 
+.github-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.github-card-badges a {
+}
+
 .github-card-badges i {
     font-size: 46px;
+    width: auto;
 }
 
 
-.language-ribbon {
+.github-card-footer .language-ribbon {
     height: 24px;
     min-height: 24px;
     background: #8492af;
@@ -221,16 +234,36 @@
 
 
 /* Skeleton */
-.skeleton-heading, .skeleton-description, .skeleton-avatar, .skeleton-counts, .skeleton-ribbon {
+.github-card-skeleton {
+    position: relative;
+}
+.github-card-skeleton::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
     background-color: #e2e5e7;
-    border-radius: 4px; 
-    margin: 5px 0;
     animation: loading-shimmer 1.5s infinite linear;
-    background: linear-gradient(to right, #e2e5e7 8%, #f2f2f2 18%, #e2e5e7 33%);
+    background: linear-gradient(to right, #dfe3eb 8%, #eaecf1 18%, #dfe3eb 33%);
     background-size: 1000px 100%; 
 }
 /* Shimmer Animation */
 @keyframes loading-shimmer {
     0% { background-position: -1000px 0; }
     100% { background-position: 1000px 0; }
+}
+
+.github-card-skeleton.repo-title::before,
+.github-card-skeleton.repo-description::before,
+.github-card-skeleton.repo-user-avatar::before,
+.github-card-stats .github-card-skeleton::before,
+.github-card-skeleton.github-card-badge::before {
+    border-radius: 4px;
+}
+.github-card-skeleton.circle-skeleton::before {
+    border-radius: 50%;
 }

@@ -31,12 +31,10 @@ function github_card_enqueue_styles_script(){
         wp_enqueue_script('github-card-repo-script');
 
         // Include your PHP JS code
-        include plugin_dir_path(__FILE__) . 'includes/load_with_js.php';
+        // include plugin_dir_path(__FILE__) . 'includes/load_with_js.php'; => merged to settings-scripts-styles.php
     }
 
-    // Auto Scale
-    if (github_card_auto_scale()) {
-        include plugin_dir_path(__FILE__) . 'includes/auto-scale.php';
-    }
+    // Settings Script and Styles
+    include plugin_dir_path(__FILE__) . 'includes/settings-scripts-styles.php';
 }
 add_action('wp_enqueue_scripts', 'github_card_enqueue_styles_script');

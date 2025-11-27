@@ -18,6 +18,7 @@ function github_safe_get($url) {
         ],
         'timeout' => 15
     ]);
+    
 
     // WordPress HTTP error
     if (is_wp_error($response)) return $response;
@@ -44,9 +45,13 @@ function github_safe_get($url) {
 
 
 // ------------------ SATRT - Option Getters ---------------- //
-function github_card_load_with() {
+function github_card_load_with($requested_option = '') {
     global $defaults;
     $key = 'github_card_load_with';
+	$option = get_option($key, $defaults[$key]);
+	if(!empty($requested_option)){
+		return !empty($option) && $option === $requested_option;
+    }
     return get_option($key, $defaults[$key]);
 }
 
@@ -64,13 +69,17 @@ function github_card_wrapper_preloader() {
     return $value;
 }
 
-function github_card_preloader_type(){
+function github_card_preloader_type($requested_option = ''){
     if(in_array(github_card_wrapper_preloader(), [null, false], true)){
-        return null;
+        return !empty($requested_option) ? false : null;
     }
 
     global $defaults;
     $key = 'github_card_preloader_type';
+	$option = get_option($key, $defaults[$key]);
+	if(!empty($requested_option)){
+		return !empty($option) && $option === $requested_option;
+    }
     return get_option($key, $defaults[$key]);
 }
 
@@ -107,6 +116,57 @@ function github_card_language_ribbon() {
     global $defaults;
     $key = 'github_card_language_ribbon';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+}
+
+
+function github_card_error() {
+    global $defaults;
+    $key = 'github_card_error';
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+}
+
+function github_card_preloader_spinner_color() {
+    global $defaults;
+    $key = 'github_card_preloader_spinner_color';
+    return get_option($key, $defaults[$key]);
+}
+
+function github_card_preloader_background_color() {
+    global $defaults;
+    $key = 'github_card_preloader_background_color';
+    return get_option($key, $defaults[$key]);
+}
+
+function github_card_enable_preloader_blur() {
+    global $defaults;
+    $key = 'github_card_enable_preloader_blur';
+    return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
+}
+
+function github_card_preloader_blur_px() {
+    global $defaults;
+    $key = 'github_card_preloader_blur_px';
+    return get_option($key, $defaults[$key]);
+}
+
+
+function github_card_skeleton_primary_color() {
+    global $defaults;
+    $key = 'github_card_skeleton_primary_color';
+    return get_option($key, $defaults[$key]);
+}
+
+
+function github_card_skeleton_secondary_color() {
+    global $defaults;
+    $key = 'github_card_skeleton_secondary_color';
+    return get_option($key, $defaults[$key]);
+}
+
+function github_card_footer_ribbon_color() {
+    global $defaults;
+    $key = 'github_card_footer_ribbon_color';
+    return get_option($key, $defaults[$key]);
 }
 
 function github_card_cache_enabled() {

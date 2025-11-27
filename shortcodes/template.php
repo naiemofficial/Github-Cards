@@ -5,7 +5,10 @@ function fn_github_card_template($atts)
 {
     ob_start();
 
-    global $data_loading_icon, $counts_empty_placeholder, $default_avatar;
+    global $data_loading_icon, $counts_empty_placeholder, $data_empty_placeholder, $default_avatar;
+
+    $is_skeleton = github_card_preloader_type('skeleton');
+    $skeleton_class = $is_skeleton ? 'github-card-skeleton' : '';
 
 
     $repo = isset($atts['repo']) ? esc_attr($atts['repo']) : '/';
@@ -32,9 +35,9 @@ function fn_github_card_template($atts)
 
     $error = false;
     $error_text = null;
-    if (github_card_load_with() === 'php') {
+    if (github_card_load_with('php')) {
         $repo_data = full_github_repo_data($atts);
-        if (is_wp_error($repo_data)) {
+        if (is_wp_error($repo_data) && github_card_error()) {
             $error = true;
             $error_text = json_encode($repo_data);
         }
@@ -53,28 +56,30 @@ function fn_github_card_template($atts)
 ?>
 
     <div class="github-card-wrapper"
-    <?php if (isset($atts['repo']) && !empty($atts['repo'])): ?>
+        <?php if (isset($atts['repo']) && !empty($atts['repo'])): ?>
         data-github-repo="<?php echo esc_attr($atts['repo']); ?>"
-    <?php endif; ?>
-    data-parameters='<?php echo json_encode($paratmeters); ?>
+        <?php endif; ?>
+        data-parameters='<?php echo json_encode($paratmeters); ?>
     '>
         <div class="github-card">
-            <?php if(github_card_wrapper_preloader()){ ?>
+            <?php if (github_card_wrapper_preloader() && github_card_preloader_type('spinner')) { ?>
                 <div class="github-card-wrapper-preloader">
                     <?php echo $data_loading_icon; ?>
                 </div>
             <?php } ?>
             <div class="github-card-header">
                 <div class="github-card-title">
-                    <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
-                        <h3><?php echo $username; ?>/<strong><?php echo $reponame; ?></strong></h3>
-                    </a>
+                    <h3 class="repo-title <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                        <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
+                            <?php echo $username; ?>/<strong><?php echo $reponame; ?></strong>
+                        </a>
+                    </h3>
                     <?php if ($show_description): ?>
-                        <?php if ($error) { ?>
-                            <p class="error"><?php echo $error_text; ?></p>
-                        <?php } else { ?>
-                            <p data-repo-description>
-                                <?php if (github_card_load_with() === 'php') { ?>
+                        <?php if (github_card_load_with('php')) { ?>
+                            <p data-repo-description class="repo-description <?php echo $error ? 'error' : '' ?>">
+                                <?php if($error){ ?>
+                                    <?php echo $error_text; ?>
+                                <?php } else { ?>
                                     <?php if ($description_words < 0) {
                                         echo $description;
                                     } elseif ($description_words == 0) {
@@ -82,30 +87,27 @@ function fn_github_card_template($atts)
                                     } else {
                                         echo wp_trim_words($description, $description_words);
                                     } ?>
-                                <?php } else if (github_card_load_with() === 'js') { ?>
-                                    <?php if (github_card_data_preloader()) {
-                                        echo $data_loading_icon;
-                                    } else {
-                                    } ?>
                                 <?php } ?>
+                            </p>
+                        <?php } else if (github_card_load_with('js')) { ?>
+                            <p data-repo-description class="repo-description <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                                <?php echo github_card_data_preloader() ? $data_loading_icon : $data_empty_placeholder; ?>
                             </p>
                         <?php } ?>
                     <?php endif; ?>
                 </div>
                 <div class="github-card-user">
-                    <div class="github-card-avatar" data-repo-avatar>
-                        <?php if (github_card_load_with() === 'php') { ?>
-                            <img src="<?php echo $error ? $default_avatar : $user_avatar_url; ?>" alt="<?php echo $username; ?>" />
-                        <?php } else if (github_card_load_with() === 'js') { ?>
+                    <div data-repo-avatar class="github-card-avatar repo-user-avatar <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                        <?php if (github_card_load_with('php')) { ?>
+                            <img src="<?php echo empty($user_avatar_url) ? $default_avatar : $user_avatar_url; ?>" alt="<?php echo $username; ?>" />
+                        <?php } else if (github_card_load_with('js')) { ?>
                             <img src="<?php echo $default_avatar; ?>" alt="<?php echo $username; ?>" />
-
                             <?php if (github_card_data_preloader()): ?>
                                 <span class="avatar-preloader">
                                     <?php echo $data_loading_icon; ?>
                                 </span>
                             <?php endif; ?>
                         <?php } ?>
-
                     </div>
                 </div>
             </div>
@@ -118,13 +120,13 @@ function fn_github_card_template($atts)
                     <div class="github-card-stats">
                         <!-- Contributors -->
                         <?php if ($show_contributors): ?>
-                            <div class="github-card-stat">
+                            <div class="github-card-stat repo-contributors <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                                 <i class="far fa-users"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-contributors>
-                                        <?php if (github_card_load_with() === 'php') { ?>
-                                            <?php echo $contributors; ?>
-                                        <?php } else if (github_card_load_with() === 'js') { ?>
+                                        <?php if (github_card_load_with('php')) { ?>
+                                            <?php echo !empty($contributors) ? $contributors : $counts_empty_placeholder; ?>
+                                        <?php } else if (github_card_load_with('js')) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
@@ -136,13 +138,13 @@ function fn_github_card_template($atts)
 
                         <!-- Issues -->
                         <?php if ($show_issues): ?>
-                            <div class="github-card-stat">
+                            <div class="github-card-stat repo-issues <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                                 <i class="far fa-dot-circle"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-issues>
-                                        <?php if (github_card_load_with() === 'php') { ?>
-                                            <?php echo $issues; ?>
-                                        <?php } else if (github_card_load_with() === 'js') { ?>
+                                        <?php if (github_card_load_with('php')) { ?>
+                                            <?php echo !empty($issues) ? $contributors : $counts_empty_placeholder; ?>
+                                        <?php } else if (github_card_load_with('js')) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
@@ -154,13 +156,13 @@ function fn_github_card_template($atts)
 
                         <!-- Stars -->
                         <?php if ($show_stars): ?>
-                            <div class="github-card-stat ml-12">
+                            <div class="github-card-stat ml-12 repo-stars <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                                 <i class="far fa-star"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-stars>
-                                        <?php if (github_card_load_with() === 'php') { ?>
-                                            <?php echo $stars; ?>
-                                        <?php } else if (github_card_load_with() === 'js') { ?>
+                                        <?php if (github_card_load_with('php')) { ?>
+                                            <?php echo !empty($stars) ? $contributors : $counts_empty_placeholder; ?>
+                                        <?php } else if (github_card_load_with('js')) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
@@ -172,13 +174,13 @@ function fn_github_card_template($atts)
 
                         <!-- Forks -->
                         <?php if ($show_forks): ?>
-                            <div class="github-card-stat ml-10">
+                            <div class="github-card-stat ml-10 repo-forks <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                                 <i class="far fa-code-branch"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-forks>
-                                        <?php if (github_card_load_with() === 'php') { ?>
-                                            <?php echo $forks; ?>
-                                        <?php } else if (github_card_load_with() === 'js') { ?>
+                                        <?php if (github_card_load_with('php')) { ?>
+                                            <?php echo !empty($forks) ? $contributors : $counts_empty_placeholder; ?>
+                                        <?php } else if (github_card_load_with('js')) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
@@ -189,22 +191,25 @@ function fn_github_card_template($atts)
                     </div>
 
                     <div class="github-card-badges">
-                        <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
-                            <i class=" fab fa-github -mr-5"></i>
-                        </a>
+                        <div class="github-card-badge circle-skeleton <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                            <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
+                                <i class=" fab fa-github"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <?php if (github_card_footer_ribbon()) { ?>
                     <div
                         <?php if (github_card_language_ribbon()): ?>
-                        <?php if (github_card_load_with() === 'php' && isset($color_gradient) && !empty($color_gradient)) { ?>
+                        <?php if (github_card_load_with('php') && isset($color_gradient) && !empty($color_gradient)) { ?>
                         style="background: <?php echo esc_attr($color_gradient); ?>;"
-                        <?php } else if (github_card_load_with() === 'js') { ?>
+                        <?php } else if (github_card_load_with('js')) { ?>
                         data-active="true"
                         <?php } ?>
                         <?php endif; ?>
-                        class="language-ribbon"></div>
+                        class="language-ribbon <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                    </div>
                 <?php } else { ?>
                     <div class="ribbon-space"></div>
                 <?php } ?>

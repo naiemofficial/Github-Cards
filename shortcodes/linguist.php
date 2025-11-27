@@ -39,12 +39,6 @@ function assign_color_to_repo_languages(&$repo_data){
 					'color' => $color,
 				];
 				
-				// if(strlen($color_gradient) > 0){
-				// 	$color_gradient .= ', ';
-				// }
-				// $color_gradient .= $color . ' ' . ($prev_percentage + $percentage) . '%';
-				// $prev_percentage = $prev_percentage + $percentage;
-				
 				[$color_gradient, $current_start] = add_gradient_stop( $color, $percentage, $current_start, $color_gradient );
 				if ($current_start >= 100.0) {
 					break;

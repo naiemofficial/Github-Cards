@@ -43,6 +43,11 @@ function github_card_admin_style_scripts($hook){
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('github_card_save_settings'),
         ]);
+
+
+        // WordPress built-in color picker
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
     }
 }
 add_action('admin_enqueue_scripts', 'github_card_admin_style_scripts');
