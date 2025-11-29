@@ -8,7 +8,7 @@ function github_card_admin_style_scripts($hook){
     if ($hook !== 'toplevel_page_github-card-settings') return;
 
     if (isset($_GET['page']) && $_GET['page'] === 'github-card-settings') {
-        wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . '../libs/fontawesome/css/all.min.css', [], '7.1.0');
+        wp_enqueue_style('font-awesome', plugin_dir_url(__FILE__) . '../assets/libs/fontawesome/css/fontawesome.min.css', [], '7.1.0');
 
         wp_enqueue_style(
             'github-card-admin-style',

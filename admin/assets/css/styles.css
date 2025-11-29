@@ -203,32 +203,45 @@ input[type=checkbox].peer:checked + div + span.peer-checked {
 
 
 
-input[type=text],
-input[type=number] {
+.github-card-admin input[type=text],
+.github-card-admin input[type=number],
+.github-card-admin select {
     transition: 0.05s;
-}
-input[type=text]:focus,
-input[type=number]:focus {
-    outline: none;
-    box-shadow: none;
+    color: #000000;
     border-color: #000000;
 }
-input[type=text]:focus-visible,
-input[type=number]:focus-visible {
-    outline: 2px solid #000000;
-    box-shadow: 0 0 0 1px #00000075;
+.github-card-admin input[type=text]:focus,
+.github-card-admin input[type=number]:focus,
+.github-card-admin select:focus {
+    outline: none;
+    box-shadow: none;
+    color: #000000;
+    border-color: #000000;
 }
-input[type=text]:hover,
-input[type=number]:hover {
+.github-card-admin input[type=text]:focus-visible,
+.github-card-admin input[type=number]:focus-visible,
+.github-card-admin select:focus-visible {
+    outline: none;
+    color: #000000;
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000;
+}
+.github-card-admin input[type=text]:hover,
+.github-card-admin input[type=number]:hover,
+.github-card-admin select:hover {
     box-shadow: 0 0 0 1px #00000025;
+    color: #000000;
+    border-color: #000000;
 }
-input[type=text]:disabled,
-input[type=number]:disabled {
+.github-card-admin input[type=text]:disabled,
+.github-card-admin input[type=number]:disabled,
+.github-card-admin select:disabled {
     background-color: #f5f5f5;
     cursor: not-allowed;
 }
-input[type=text]::placeholder,
-input[type=number]::placeholder {
+.github-card-admin input[type=text]::placeholder,
+.github-card-admin input[type=number]::placeholder,
+.github-card-admin select::placeholder {
     color: #a0a0a0;
 }
 
@@ -306,4 +319,74 @@ input[type=number]::placeholder {
 
 .min-h-32px {
     min-height: 32px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Tooltip wrapper needs this */
+.tooltip-wrapper {
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+}
+
+/* Tooltip container */
+.github-card-tooltip {
+    position: relative;
+    display: inline-block;
+    z-index: 100;
+}
+
+/* Tooltip text bubble */
+.github-card-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(50% + 15px);
+    bottom: calc(100% + 20px);
+    transform: translateX(-50%);
+    background: var(--tooltip-bg-color);
+    color: var(--tooltip-text-color);
+    padding: var(--tooltip-padding);
+    font-size: var(--tooltip-font-size);
+    border-radius: var(--tooltip-border-radius);
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 500px;
+    white-space: normal;
+    text-align: center;
+}
+
+/* Tooltip arrow */
+.github-card-tooltip::before {
+    content: "";
+    position: absolute;
+    left: calc(50% + 15px);
+    bottom: calc(100% + 9px);
+    transform: translateX(-50%);
+    border-width: var(--tooltip-arrow-size);
+    border-style: solid;
+    border-color: var(--tooltip-bg-color) transparent transparent transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+}
+
+/* Show tooltip on hover */
+.tooltip-wrapper:hover .github-card-tooltip::after,
+.tooltip-wrapper:hover .github-card-tooltip::before {
+    opacity: 1;
+    visibility: visible;
 }

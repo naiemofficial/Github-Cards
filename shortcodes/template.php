@@ -21,6 +21,7 @@ function fn_github_card_template($atts)
 
 
     // Shortcode Parameters
+    $show_avatar = !isset($atts['avatar']) || $atts['avatar'] !== 'false';
     $description_words = isset($atts['description-words']) ? intval($atts['description-words']) : -1;
     $show_description = !isset($atts['description']) || $atts['description'] !== 'false';
     $show_contributors = !isset($atts['contributors']) || $atts['contributors'] !== 'false';
@@ -35,8 +36,13 @@ function fn_github_card_template($atts)
 
     $error = false;
     $error_text = null;
-    if (github_card_load_with('php')) {
+
+    $is_loaded_via_php = github_card_load_with('php');
+    $is_loaded_via_js = github_card_load_with('js');
+
+    if ($is_loaded_via_php) {
         $repo_data = full_github_repo_data($atts);
+        // var_dump($repo_data);
         if (is_wp_error($repo_data) && github_card_error()) {
             $error = true;
             $error_text = json_encode($repo_data);
@@ -48,6 +54,7 @@ function fn_github_card_template($atts)
 
         $contributors = get_or_null($repo_data, 'contributors');
         $issues = get_or_null($repo_data, 'all_issues');
+        $open_issues = get_or_null($repo_data, 'open_issues');
         $stars = get_or_null($repo_data, 'stars');
         $forks = get_or_null($repo_data, 'forks');
 
@@ -75,9 +82,9 @@ function fn_github_card_template($atts)
                         </a>
                     </h3>
                     <?php if ($show_description): ?>
-                        <?php if (github_card_load_with('php')) { ?>
+                        <?php if ($is_loaded_via_php) { ?>
                             <p data-repo-description class="repo-description <?php echo $error ? 'error' : '' ?>">
-                                <?php if($error){ ?>
+                                <?php if ($error) { ?>
                                     <?php echo $error_text; ?>
                                 <?php } else { ?>
                                     <?php if ($description_words < 0) {
@@ -89,7 +96,7 @@ function fn_github_card_template($atts)
                                     } ?>
                                 <?php } ?>
                             </p>
-                        <?php } else if (github_card_load_with('js')) { ?>
+                        <?php } else if ($is_loaded_via_js) { ?>
                             <p data-repo-description class="repo-description <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                                 <?php echo github_card_data_preloader() ? $data_loading_icon : $data_empty_placeholder; ?>
                             </p>
@@ -97,16 +104,22 @@ function fn_github_card_template($atts)
                     <?php endif; ?>
                 </div>
                 <div class="github-card-user">
-                    <div data-repo-avatar class="github-card-avatar repo-user-avatar <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
-                        <?php if (github_card_load_with('php')) { ?>
-                            <img src="<?php echo empty($user_avatar_url) ? $default_avatar : $user_avatar_url; ?>" alt="<?php echo $username; ?>" />
-                        <?php } else if (github_card_load_with('js')) { ?>
-                            <img src="<?php echo $default_avatar; ?>" alt="<?php echo $username; ?>" />
-                            <?php if (github_card_data_preloader()): ?>
-                                <span class="avatar-preloader">
-                                    <?php echo $data_loading_icon; ?>
-                                </span>
-                            <?php endif; ?>
+                    <div class="github-card-avatar repo-user-avatar <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
+                        <?php if($show_avatar){ ?>
+                            <div class="inline-flex" data-repo-avatar>
+                                <?php if ($is_loaded_via_php) { ?>
+                                    <img src="<?php echo empty($user_avatar_url) ? $default_avatar : $user_avatar_url; ?>" alt="<?php echo $username; ?>" />
+                                <?php } else if ($is_loaded_via_js) { ?>
+                                    <img src="<?php echo $default_avatar; ?>" alt="<?php echo $username; ?>" />
+                                    <?php if (github_card_data_preloader()): ?>
+                                        <span class="avatar-preloader">
+                                            <?php echo $data_loading_icon; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                <?php } ?>
+                            </div>
+                        <?php } else { ?>
+                            <img src="<?php echo $default_avatar; ?>" alt="Hidden Avatar" />
                         <?php } ?>
                     </div>
                 </div>
@@ -124,13 +137,19 @@ function fn_github_card_template($atts)
                                 <i class="far fa-users"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-contributors>
-                                        <?php if (github_card_load_with('php')) { ?>
-                                            <?php echo !empty($contributors) ? $contributors : $counts_empty_placeholder; ?>
-                                        <?php } else if (github_card_load_with('js')) { ?>
+                                        <?php if ($is_loaded_via_php) { ?>
+                                            <?php echo !empty($contributors) || $contributors === 0 ? contributors_plus($contributors) : $counts_empty_placeholder; ?>
+                                        <?php } else if ($is_loaded_via_js) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
-                                    <span>Contributors</span>
+                                    <span class="count-label" data-repo-contributors-label>
+                                        <?php echo pluralize(
+                                            $is_loaded_via_php ? (int)$contributors : 0,
+                                            'Contributor',
+                                            's'
+                                        ); ?>
+                                    </span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -142,13 +161,19 @@ function fn_github_card_template($atts)
                                 <i class="far fa-dot-circle"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-issues>
-                                        <?php if (github_card_load_with('php')) { ?>
-                                            <?php echo !empty($issues) ? $contributors : $counts_empty_placeholder; ?>
-                                        <?php } else if (github_card_load_with('js')) { ?>
+                                        <?php if ($is_loaded_via_php) { ?>
+                                            <?php echo !empty($open_issues) || $open_issues === 0 ? compact_number($open_issues) : $counts_empty_placeholder; ?>
+                                        <?php } else if ($is_loaded_via_js) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
-                                    <span>Issues</span>
+                                    <span class="count-label" data-repo-issues-label>
+                                        <?php echo pluralize(
+                                            $is_loaded_via_php ? (int)$open_issues : 0,
+                                            'Issue',
+                                            's'
+                                        ); ?>
+                                    </span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -160,13 +185,19 @@ function fn_github_card_template($atts)
                                 <i class="far fa-star"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-stars>
-                                        <?php if (github_card_load_with('php')) { ?>
-                                            <?php echo !empty($stars) ? $contributors : $counts_empty_placeholder; ?>
-                                        <?php } else if (github_card_load_with('js')) { ?>
+                                        <?php if ($is_loaded_via_php) { ?>
+                                            <?php echo !empty($stars) || $stars === 0 ? compact_number($stars) : $counts_empty_placeholder; ?>
+                                        <?php } else if ($is_loaded_via_js) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
-                                    <span>Stars</span>
+                                    <span class="count-label" data-repo-stars-label>
+                                        <?php echo pluralize(
+                                            $is_loaded_via_php ? (int)$stars : 0,
+                                            'Star',
+                                            's'
+                                        ); ?>
+                                    </span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -178,13 +209,19 @@ function fn_github_card_template($atts)
                                 <i class="far fa-code-branch"></i>
                                 <div class="github-card-stat-text">
                                     <span class="count" data-repo-forks>
-                                        <?php if (github_card_load_with('php')) { ?>
-                                            <?php echo !empty($forks) ? $contributors : $counts_empty_placeholder; ?>
-                                        <?php } else if (github_card_load_with('js')) { ?>
+                                        <?php if ($is_loaded_via_php) { ?>
+                                            <?php echo !empty($forks) || $forks === 0 ? compact_number($forks) : $counts_empty_placeholder; ?>
+                                        <?php } else if ($is_loaded_via_js) { ?>
                                             <?php echo github_card_data_preloader() ? $data_loading_icon : $counts_empty_placeholder; ?>
                                         <?php } ?>
                                     </span>
-                                    <span>Forks</span>
+                                    <span class="count-label" data-repo-forks-label>
+                                        <?php echo pluralize(
+                                            $is_loaded_via_php ? (int)$forks : 0,
+                                            'Fork',
+                                            's'
+                                        ); ?>
+                                    </span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -202,9 +239,9 @@ function fn_github_card_template($atts)
                 <?php if (github_card_footer_ribbon()) { ?>
                     <div
                         <?php if (github_card_language_ribbon()): ?>
-                        <?php if (github_card_load_with('php') && isset($color_gradient) && !empty($color_gradient)) { ?>
+                        <?php if ($is_loaded_via_php && isset($color_gradient) && !empty($color_gradient)) { ?>
                         style="background: <?php echo esc_attr($color_gradient); ?>;"
-                        <?php } else if (github_card_load_with('js')) { ?>
+                        <?php } else if ($is_loaded_via_js) { ?>
                         data-active="true"
                         <?php } ?>
                         <?php endif; ?>
@@ -221,4 +258,21 @@ function fn_github_card_template($atts)
     return ob_get_clean();
 }
 
-add_shortcode('github_card_template', 'fn_github_card_template');
+
+function fn_github_card_mini($atts)
+{
+    $repo = isset($atts['repo']) ? esc_attr($atts['repo']) : '/';
+    $gh_card_mini_url = "https://gh-card.dev/repos/{$repo}.svg";
+    return '<img src="' . esc_url($gh_card_mini_url) . '" alt="' . esc_attr($repo) . ' GitHub Card" />';
+}
+
+
+function fn_github_card($args)
+{
+    if (isset($args['mini']) && $args['mini'] === 'true') {
+        return fn_github_card_mini($args);
+    }
+    return fn_github_card_template($args);
+}
+
+add_shortcode('github_card', 'fn_github_card');

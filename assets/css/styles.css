@@ -248,7 +248,7 @@
     z-index: 2;
     background-color: #e2e5e7;
     animation: loading-shimmer 1.5s infinite linear;
-    background: linear-gradient(to right, #dfe3eb 8%, #eaecf1 18%, #dfe3eb 33%);
+    background: linear-gradient(to right, #dfe3eb 8%, #eceff6 18%, #dfe3eb 33%);
     background-size: 1000px 100%; 
 }
 /* Shimmer Animation */

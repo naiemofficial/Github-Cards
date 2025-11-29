@@ -45,7 +45,7 @@ function github_safe_get($url) {
 
 
 // ------------------ SATRT - Option Getters ---------------- //
-function github_card_load_with($requested_option = '') {
+function github_card_load_with($requested_option = '', $other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_load_with';
 	$option = get_option($key, $defaults[$key]);
@@ -55,8 +55,8 @@ function github_card_load_with($requested_option = '') {
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_wrapper_preloader() {
-    if (github_card_load_with() === 'php') {
+function github_card_wrapper_preloader($other_input_dependency = true) {
+    if ($other_input_dependency && github_card_load_with() === 'php') {
         return null;
     }
     
@@ -69,8 +69,8 @@ function github_card_wrapper_preloader() {
     return $value;
 }
 
-function github_card_preloader_type($requested_option = ''){
-    if(in_array(github_card_wrapper_preloader(), [null, false], true)){
+function github_card_preloader_type($requested_option = '', $other_input_dependency = true){
+    if($other_input_dependency && in_array(github_card_wrapper_preloader(), [null, false], true)){
         return !empty($requested_option) ? false : null;
     }
 
@@ -83,32 +83,32 @@ function github_card_preloader_type($requested_option = ''){
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_data_preloader() {
+function github_card_data_preloader($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_data_preloader';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
-function github_card_auto_scale() {
+function github_card_auto_scale($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_auto_scale';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
 
-function github_card_spinner() {
+function github_card_spinner($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_spinner';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_footer_ribbon() {
+function github_card_footer_ribbon($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_footer_ribbon';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
-function github_card_language_ribbon() {
+function github_card_language_ribbon($other_input_dependency = true) {
     if(!github_card_footer_ribbon()) {
         return false;
     }
@@ -119,64 +119,93 @@ function github_card_language_ribbon() {
 }
 
 
-function github_card_error() {
+function github_card_error($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_error';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
-function github_card_preloader_spinner_color() {
+function github_card_preloader_spinner_color($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_preloader_spinner_color';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_preloader_background_color() {
+function github_card_preloader_background_color($other_input_dependency = true) {
+    if ($other_input_dependency && !github_card_preloader_type('spinner')) {
+        return null;
+    }
     global $defaults;
     $key = 'github_card_preloader_background_color';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_enable_preloader_blur() {
+function github_card_enable_preloader_blur($other_input_dependency = true) {
+    if($other_input_dependency && !github_card_preloader_type('spinner')){
+        return false;
+    }
     global $defaults;
     $key = 'github_card_enable_preloader_blur';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
-function github_card_preloader_blur_px() {
+function github_card_preloader_blur_px($other_input_dependency = true) {
+    if(github_card_enable_preloader_blur()){
+        return null;
+    }
     global $defaults;
     $key = 'github_card_preloader_blur_px';
     return get_option($key, $defaults[$key]);
 }
 
 
-function github_card_skeleton_primary_color() {
+function github_card_skeleton_primary_color($other_input_dependency = true) {
+    if($other_input_dependency && !github_card_preloader_type('skeleton')){
+        return null;
+    }
     global $defaults;
     $key = 'github_card_skeleton_primary_color';
     return get_option($key, $defaults[$key]);
 }
 
 
-function github_card_skeleton_secondary_color() {
+function github_card_skeleton_secondary_color($other_input_dependency = true) {
+    if ($other_input_dependency && !github_card_preloader_type('skeleton')) {
+        return null;
+    }
     global $defaults;
     $key = 'github_card_skeleton_secondary_color';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_footer_ribbon_color() {
+function github_card_footer_ribbon_color($other_input_dependency = true) {
+    if($other_input_dependency && !github_card_footer_ribbon()){
+        return null;
+    }
     global $defaults;
     $key = 'github_card_footer_ribbon_color';
     return get_option($key, $defaults[$key]);
 }
 
-function github_card_cache_enabled() {
+function github_card_fontawesome_support($other_input_dependency = true) {
+    global $defaults;
+    $key = 'github_card_fontawesome_support';
+    $option = get_option($key, $defaults[$key]);
+    if(empty($option)){
+        return 'enable';
+    }
+    return $option;
+}
+
+
+function github_card_cache_enabled($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_cache_enabled';
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
-function github_card_cache_duration() {
-    if(!github_card_cache_enabled()){
+function github_card_cache_duration($other_input_dependency = true) {
+    if($other_input_dependency && !github_card_cache_enabled()){
         return 0;
     }
     
@@ -188,6 +217,56 @@ function github_card_cache_duration() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 function get_or_null($array, $key){
 	return is_array($array) && isset($array[$key]) ? $array[$key] : null;
+}
+
+
+
+function compact_number($number) {
+    if (!is_numeric($number)) return $number;
+
+    $absNumber = abs($number);
+    if ($absNumber < 1000) {
+        return (string)$number;
+    }
+
+    $units = ['', 'K', 'M', 'B', 'T']; // Thousand, Million, Billion, Trillion
+    $power = floor(log($absNumber, 1000)); // Determine which unit to use
+    $value = $number / pow(1000, $power);
+
+    // Remove .0 if whole number
+    $value = ($value == floor($value)) ? floor($value) : round($value, 1);
+
+    return $value . $units[$power];
+}
+
+
+
+
+function contributors_plus($number){
+    if($number >= 100){
+        return $number . '+';
+    }
+    return (string)$number;
+}
+
+
+
+
+function pluralize($count, $singular, $plural_suffix){
+    return $count <= 1 ? $singular : $singular . $plural_suffix;
 }

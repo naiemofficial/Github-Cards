@@ -12,31 +12,32 @@ return [
         'groups' => ['card-settings'],
     ],
 
+    'github_card_wrapper_preloader' => [
+        'type' => 'checkbox',
+        'label' => 'Wrapper Preloader',
+        'default' => 'on',
+        'groups' => ['card-settings'],
+    ],
+
     'github_card_preloader_type'   => [
         'type' => 'radio',
         'label' => 'Preloader Type',
         'values' => ['spinner', 'skeleton'],
-        'default' => 'spinner',
-        'groups' => ['card-settings'],
-    ],
-
-    'github_card_wrapper_preloader' => [
-        'type' => 'checkbox',
-        'label' => 'Wrapper Preloader',
-        'default' => 'off',
+        'default' => 'skeleton',
         'groups' => ['card-settings'],
     ],
 
     'github_card_data_preloader' => [
         'type' => 'checkbox',
         'label' => 'Repo Data Preloader',
-        'default' => 'on',
+        'default' => 'off',
         'groups' => ['card-settings'],
     ],
 
     'github_card_auto_scale'       => [
         'type' => 'checkbox',
         'label' => 'Enable Auto Scale',
+        'description' => "The card will scaled based on parent element width <br><small>(Default size 1200px/600px or the aspect ratio is 12/6)</small>",
         'default' => 'on',
         'groups' => ['card-settings'],
     ],
@@ -66,7 +67,7 @@ return [
     'github_card_language_ribbon'    => [
         'type' => 'checkbox',
         'label' => 'Color Ribbon by Language(s)',
-        'default' => 'off',
+        'default' => 'on',
         'groups' => ['ribbon-settings'],
     ],
 
@@ -83,6 +84,7 @@ return [
     'github_card_preloader_spinner_color' => [
         'type' => 'color',
         'label' => 'Spinner Color',
+        'description' => 'Applies on wrapper preloader and loading icon color',
         'default' => '#8492AF',
         'groups' => ['color-settings'],
     ],
@@ -90,6 +92,7 @@ return [
     'github_card_preloader_background_color' => [
         'type' => 'color',
         'label' => 'Background Color',
+        'description' => 'Applies on wrapper preloader <br><small>To see backdrop blur effect, use alpha color/value</small>',
         'default' => '#ffffff42',
         'alpha' => true,
         'groups' => ['color-settings'],
@@ -98,7 +101,8 @@ return [
     'github_card_enable_preloader_blur' => [
         'type' => 'checkbox',
         'label' => 'Enable Blur Effect',
-        'default' => 'off',
+        'description' => 'Wrapper background should have alpha value to apply this',
+        'default' => 'on',
         'groups' => ['color-settings'],
     ],
 
@@ -121,7 +125,8 @@ return [
     'github_card_skeleton_secondary_color' => [
         'type' => 'color',
         'label' => 'Secondary Color',
-        'default' => '#dfe3eb',
+        'description' => 'Wave effect <small>(Should be slightly different than primary color)</small>',
+        'default' => '#eceff6',
         'groups' => ['card-settings'],
     ],
 
@@ -131,6 +136,28 @@ return [
         'label' => 'Footer Ribbon Color',
         'default' => '#8492AF',
         'groups' => ['ribbon-settings'],
+    ],
+
+
+
+
+    'github_card_fontawesome_support'    => [
+        'type' => 'radio',
+        'label' => 'Fontawesome Support',
+        'version' => '7.1.0',
+        'description' => '<small>Manage FontAwesome loading to avoid conflicts with existing FontAwesome from theme or other plugins</small>',
+        'descriptions' => [
+            'disable' => GITHUB_CARD_PLUGIN_NAME . ' will not load FontAwesome, but the card will use existing FontAwesome from the theme or other plugins',
+            'enable' => 'Plugin will load FontAwesome from plugin itself',
+            'replace' => 'Plugin will replace existing FontAwesome with its own FontAwesome',
+        ],
+        'values' => [
+            'disable' => 'Disable', // Plugin will not load FontAwesome, but the card will use existing FontAwesome from the theme or other plugins
+            'enable' => 'Enable',   // Plugin will load FontAwesome from plugin itself
+            'replace' => 'Replace', // Plugin will replace existing FontAwesome with its own FontAwesome
+        ],
+        'default' => 'enable',
+        'groups' => ['other-settings'],
     ],
 
 

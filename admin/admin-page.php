@@ -120,7 +120,7 @@ function github_card_render_admin_page()
                             $key = 'github_card_wrapper_preloader';
                             $input = $all_input_settings[$key];
                             $label = $input['label'];
-                            $value = github_card_wrapper_preloader();
+                            $value = github_card_wrapper_preloader(other_input_dependency: false);
                             ?>
                             <div class="flex items-center justify-between animate-fade-in-up">
                                 <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -138,14 +138,14 @@ function github_card_render_admin_page()
                             $key = 'github_card_preloader_type';
                             $input = $all_input_settings[$key];
                             $label = $input['label'];
-                            $preloader_type = get_option($key, $defaults[$key]);
+                            $preloader_type = github_card_preloader_type(other_input_dependency: false);
                             $values = $input['values'];
                             ?>
                             <div class="animate-fade-in-up flex items-center justify-between animate-scale-up" data-condition="wrapper-preloader-on">
                                 <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
                                 <select
                                     name="github_card_preloader_type"
-                                    class="border rounded-lg px-3 py-2 w-48 focus:ring-[#141414] focus:border-[#141414]">
+                                    class="border rounded-lg px-3 py-2 w-48 focus:ring-[#141414] focus:border-[#141414] text-xs">
                                     <?php foreach ($values as $value) { ?>
                                         <option value="<?php echo esc_attr($value); ?>" <?php selected($preloader_type, $value); ?>>
                                             <?php echo esc_html(ucfirst($value)); ?>
@@ -162,7 +162,7 @@ function github_card_render_admin_page()
                             $key = 'github_card_data_preloader';
                             $input = $all_input_settings[$key];
                             $label = $input['label'];
-                            $value = github_card_data_preloader();
+                            $value = github_card_data_preloader(other_input_dependency: false);
                             ?>
                             <div class="flex items-center justify-between animate-fade-in-up">
                                 <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -183,10 +183,14 @@ function github_card_render_admin_page()
                 $key = 'github_card_auto_scale';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
-                $value = github_card_auto_scale();
+                $description = $input['description'];
+                $value = github_card_auto_scale(other_input_dependency: false);
                 ?>
                 <div class="p-4 rounded-lg border border-white flex items-center justify-between animate-fade-in-up">
-                    <label class="font-medium"><?php echo esc_html($label); ?></label>
+                    <div>
+                        <label class="font-medium"><?php echo esc_html($label); ?></label>
+                        <p><?php echo $description; ?></p>
+                    </div>
                     <label class="relative inline-flex items-center cursor-pointe checkbox-label m-0">
                         <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($value); ?> />
                         <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
@@ -201,8 +205,8 @@ function github_card_render_admin_page()
                 $key = 'github_card_spinner';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
-                $spinner = github_card_spinner();
                 $values = $input['values'];
+                $spinner = github_card_spinner(other_input_dependency: false);
                 ?>
                 <div class="github_card_spinner p-4 rounded-lg border border-white flex items-center justify-between animate-fade-in-up">
                     <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -228,7 +232,7 @@ function github_card_render_admin_page()
                     $key = 'github_card_footer_ribbon';
                     $input = $all_input_settings[$key];
                     $label = $input['label'];
-                    $value = github_card_footer_ribbon();
+                    $value = github_card_footer_ribbon(other_input_dependency: false);
                     ?>
                     <div class="flex items-center justify-between animate-fade-in-up">
                         <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -245,7 +249,7 @@ function github_card_render_admin_page()
                     $key = 'github_card_language_ribbon';
                     $input = $all_input_settings[$key];
                     $label = $input['label'];
-                    $value = github_card_language_ribbon();
+                    $value = github_card_language_ribbon(other_input_dependency: false);
                     ?>
                     <div class="flex items-center justify-between animate-fade-in-up" data-condition="data-footer-ribbon-on">
                         <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -265,7 +269,7 @@ function github_card_render_admin_page()
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
                 $description = $input['description'];
-                $value = github_card_error();
+                $value = github_card_error(other_input_dependency: false);
                 ?>
                 <div class="p-4 rounded-lg border border-white flex items-center gap-1 justify-between animate-fade-in-up">
                     <div class="flex flex-col">
@@ -289,55 +293,81 @@ function github_card_render_admin_page()
                 <h2 class=" text-xl font-semibold border-b pb-2">Color Settings</h2>
 
                 <div class="flex flex-col space-y-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <!-- Wrapper Spinner Preloader Color  -->
+                    <!-- Spinner Color  -->
+                    <?php
+                    $key = 'github_card_preloader_spinner_color';
+                    $input = $all_input_settings[$key];
+                    $label = $input['label'];
+                    $description = $input['description'];
+                    $value = github_card_preloader_spinner_color(other_input_dependency: false);
+                    ?>
                     <div class="flex items-center justify-between animate-fade-in-up">
-                        <label class="font-medium">Wrapper Preloader / Counts Spinner</label>
-
-                        <?php
-                        $key_spinner_color = 'github_card_preloader_spinner_color';
-                        $input_spinner = $all_input_settings[$key_spinner_color];
-                        $label_spinner = $input_spinner['label'];
-                        $spinner_color = github_card_preloader_spinner_color();
-
-                        $key_background_color = 'github_card_preloader_background_color';
-                        $input_background = $all_input_settings[$key_background_color];
-                        $label_background = $input_background['label'];
-                        $alpha = isset($input_background['alpha']) ? filter_var($input_background['alpha'], FILTER_VALIDATE_BOOL) : false;
-                        $background_color = github_card_preloader_background_color();
-                        ?>
-                        <div class="flex flex-col items-end gap-4">
-                            <div class="flex flex-row items-center gap-4">
-                                <label class="mb-2 font-medium"><?php echo esc_html($label_spinner); ?></label>
-                                <input type="text" name="<?php echo esc_attr($key_spinner_color); ?>" value="<?php echo esc_attr($spinner_color); ?>" class="github-card-color-field" />
-                            </div>
-                            <div class="flex flex-row items-center gap-4" data-condition="preloader-type-spinner">
-                                <label class="mb-2 font-medium"><?php echo esc_html($label_background); ?></label>
-                                <input type="text" name="<?php echo esc_attr($key_background_color); ?>" value="<?php echo esc_attr($background_color); ?>" class="github-card-color-field" data-alpha="<?php echo $alpha; ?>" />
-                            </div>
+                        <div class="flex flex-col">
+                            <label class="font-medium"><?php echo esc_html($label); ?></label>
+                            <?php if (!empty($description)): ?>
+                                <p class="text-small"><?php echo $description; ?></p>
+                            <?php endif; ?>
                         </div>
+                        <input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" class="github-card-color-field" />
                     </div>
 
-
-                    <!-- Preloader Blur -->
-                    <?php
-                    $key_enable_preloader_blur = 'github_card_enable_preloader_blur';
-                    $value_enable_preloader_blur = github_card_enable_preloader_blur();
-
-                    $key_preloader_blur_px = 'github_card_preloader_blur_px';
-                    $value_preloader_blur_px = github_card_preloader_blur_px();
-                    ?>
-                    <div class="rounded-lg flex items-center justify-between animate-fade-in-up" data-condition="preloader-type-spinner">
-                        <label class="font-medium">Preloader Blur</label>
-                        <div class="inline-flex items-center gap-4">
-                            <div data-condition="enable-preloader-blur-on" class="flex items-center" data-condition="enable-preloader-blur-on">
-                                <input type="number" name="<?php echo esc_attr($key_preloader_blur_px); ?>" value="<?php echo esc_attr($value_preloader_blur_px); ?>" min="0" placeholder="Pixels" class="border rounded-lg px-3 py-2 w-16 ml-4 focus:ring-[#141414] focus:border-[#141414]" />
+                    <div class="flex items-center animate-fade-in-up gap-6">
+                        <div>
+                            <label class="font-medium">Spinner</label>
+                            <p><small>(Wrapper Preloader)</small></p>
+                        </div>
+                        <div class="flex flex-col items-end gap-4 flex-1 pl-5" style="border-left: 3px dashed #e5e7eb;">
+                            <!-- Wrapper Preloader Background  -->
+                            <?php
+                            $key = 'github_card_preloader_background_color';
+                            $input = $all_input_settings[$key];
+                            $label = $input['label'];
+                            $description = $input['description'];
+                            $value = github_card_preloader_spinner_color(other_input_dependency: false);
+                            ?>
+                            <div class="flex items-center justify-between animate-fade-in-up w-full">
+                                <div class="flex flex-col">
+                                    <label class="font-medium"><?php echo esc_html($label); ?></label>
+                                    <?php if (!empty($description)): ?>
+                                        <p class="text-small"><?php echo $description; ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" class="github-card-color-field" />
                             </div>
-                            <div class="min-h-32px inline-flex items-center">
-                                <label class="relative inline-flex items-center cursor-pointer checkbox-label">
-                                    <input type="checkbox" name="<?php echo esc_attr($key_enable_preloader_blur); ?>" value="on" class="sr-only peer" <?php checked($value_enable_preloader_blur); ?> />
-                                    <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
-                                    <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
-                                </label>
+
+
+                            <!-- Preloader Blur -->
+                            <?php
+                            $key_enable_preloader_blur = 'github_card_enable_preloader_blur';
+                            $input_enable_preloader_blur = $all_input_settings[$key_enable_preloader_blur];
+                            $label_enable_preloader_blur = $input_enable_preloader_blur['label'];
+                            $description_enable_preloader_blur = $input_enable_preloader_blur['description'];
+                            $value_enable_preloader_blur = github_card_enable_preloader_blur(other_input_dependency: false);
+
+                            $key_preloader_blur_px = 'github_card_preloader_blur_px';
+                            $value_preloader_blur_px = github_card_preloader_blur_px(other_input_dependency: false);
+                            ?>
+                            <div class="rounded-lg flex items-center justify-between animate-fade-in-up w-full" data-condition="preloader-type-spinner">
+                                <div>
+                                    <div>
+                                        <label class="font-medium"><?php echo esc_html($label_enable_preloader_blur); ?></label>
+                                        <?php if (!empty($description_enable_preloader_blur)): ?>
+                                            <p class="text-small"><?php echo $description_enable_preloader_blur; ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="inline-flex items-center gap-4">
+                                    <div data-condition="enable-preloader-blur-on" class="flex items-center" data-condition="enable-preloader-blur-on">
+                                        <input type="number" name="<?php echo esc_attr($key_preloader_blur_px); ?>" value="<?php echo esc_attr($value_preloader_blur_px); ?>" min="0" placeholder="Pixels" class="border rounded-lg px-3 py-2 w-16 ml-4 focus:ring-[#141414] focus:border-[#141414]" />
+                                    </div>
+                                    <div class="min-h-32px inline-flex items-center">
+                                        <label class="relative inline-flex items-center cursor-pointer checkbox-label">
+                                            <input type="checkbox" name="<?php echo esc_attr($key_enable_preloader_blur); ?>" value="on" class="sr-only peer" <?php checked($value_enable_preloader_blur); ?> />
+                                            <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
+                                            <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,27 +375,32 @@ function github_card_render_admin_page()
 
                 <div class="flex flex-col space-y-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <!-- Skeleton Color  -->
-                    <div class="flex items-center justify-between animate-fade-in-up" data-condition="preloader-type-skeleton">
+                    <div class="flex items-center animate-fade-in-up gap-6" data-condition="preloader-type-skeleton">
                         <label class="font-medium">Skeleton</label>
+                        <div class="flex flex-col items-end gap-4 flex-1 pl-5" style="border-left: 3px dashed #e5e7eb;">
+                            <?php
+                            $key_primary = 'github_card_skeleton_primary_color';
+                            $input_primary = $all_input_settings[$key_primary];
+                            $label_primary = $input_primary['label'];
+                            $value_primary = github_card_skeleton_primary_color(other_input_dependency: false);
 
-                        <?php
-                        $key_primary = 'github_card_skeleton_primary_color';
-                        $input_primary = $all_input_settings[$key_primary];
-                        $label_primary = $input_primary['label'];
-                        $value_primary = github_card_skeleton_primary_color();
-
-                        $key_secondary = 'github_card_skeleton_secondary_color';
-                        $input_secondary = $all_input_settings[$key_secondary];
-                        $label_secondary = $input_secondary['label'];
-                        $value_secondary = github_card_skeleton_secondary_color();
-                        ?>
-                        <div class="flex flex-col items-end gap-4">
-                            <div class="flex flex-row items-center gap-4">
+                            $key_secondary = 'github_card_skeleton_secondary_color';
+                            $input_secondary = $all_input_settings[$key_secondary];
+                            $label_secondary = $input_secondary['label'];
+                            $description_secondary = $input_secondary['description'];
+                            $value_secondary = github_card_skeleton_secondary_color(other_input_dependency: false);
+                            ?>
+                            <div class="flex flex-row items-center gap-4 justify-between flex-1 w-full">
                                 <label class="mb-2 font-medium"><?php echo esc_html($label_primary); ?></label>
                                 <input type="text" name="<?php echo esc_attr($key_primary); ?>" value="<?php echo esc_attr($value_primary); ?>" class="github-card-color-field" />
                             </div>
-                            <div class="flex flex-row items-center gap-4">
-                                <label class="mb-2 font-medium"><?php echo esc_html($label_secondary); ?></label>
+                            <div class="flex flex-row items-center gap-4 justify-between flex-1 w-full">
+                                <div>
+                                    <label class="mb-2 font-medium"><?php echo esc_html($label_secondary); ?></label>
+                                    <?php if (!empty($description_secondary)): ?>
+                                        <p class="text-small"><?php echo $description_secondary; ?></p>
+                                    <?php endif; ?>
+                                </div>
                                 <input type="text" name="<?php echo esc_attr($key_secondary); ?>" value="<?php echo esc_attr($value_secondary); ?>" class="github-card-color-field" />
                             </div>
                         </div>
@@ -378,13 +413,67 @@ function github_card_render_admin_page()
                 $key = 'github_card_footer_ribbon_color';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
-                $value = github_card_footer_ribbon_color();
+                $value = github_card_footer_ribbon_color(other_input_dependency: false);
                 ?>
                 <div class="p-4 rounded-lg border border-white flex items-center justify-between animate-fade-in-up" data-condition="footer-ribbon-on">
                     <label class="font-medium"><?php echo esc_html($label); ?></label>
                     <input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" class="github-card-color-field" />
                 </div>
             </div>
+
+
+
+            <!-- Other Settings -->
+            <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
+                <h2 class="text-xl font-semibold border-b pb-2">Other Settings</h2>
+                <?php
+                $key = 'github_card_fontawesome_support';
+                $input = $all_input_settings[$key];
+                $label = $input['label'];
+                $version = $input['version'];
+                $description = $input['description'];
+                $descriptions = $input['descriptions'];
+                $load_with = github_card_fontawesome_support();
+                $values = $input['values'];
+                ?>
+                <div class="p-4 rounded-lg border border-white flex items-center justify-between animate-fade-in-up gap-4">
+                    <div class="pr-5">
+                        <div>
+                            <label class="font-medium"><?php echo esc_html($label); ?></label>
+                            <span class="ml-1 inline-block bg-gray-200 text-gray-800 text-xs font-semibold px-2 py-1 rounded"><?php echo esc_html($version); ?></span>
+                        </div>
+                        <p><?php echo $description; ?></p>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex gap-6">
+                            <?php foreach ($values as $value_key => $text) { ?>
+                                <label class="flex items-center gap-2 cursor-pointer animate-fade-in tooltip-wrapper">
+                                    <tooltip class="github-card-tooltip" data-tooltip="<?php echo esc_attr($descriptions[$value_key]); ?>"></tooltip>
+                                    <input
+                                        type="radio"
+                                        name="<?php echo esc_attr($key); ?>"
+                                        value="<?php echo esc_attr($value_key); ?>"
+                                        class="h-4 w-4 text-[#141414] border-[#141414] checked:bg-[#141414] checked:border-[#141414]"
+                                        <?php checked($load_with, $value_key); ?> />
+                                    <span><?php echo esc_html($text); ?></span>
+                                </label>
+                            <?php } ?>
+                        </div>
+                        <style>
+                            .github-card-tooltip {
+                                --tooltip-bg-color: #141414;
+                                --tooltip-text-color: #ffffff;
+                                --tooltip-padding: 6px 10px;
+                                --tooltip-font-size: 12px;
+                                --tooltip-border-radius: 4px;
+                                --tooltip-arrow-size: 6px;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+
+
 
             <!-- Cache Section -->
             <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
@@ -394,7 +483,7 @@ function github_card_render_admin_page()
                 $key = 'github_card_cache_enabled';
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
-                $cache_enabled = github_card_cache_enabled();
+                $cache_enabled = github_card_cache_enabled(other_input_dependency: false);
                 ?>
                 <div class="flex items-center justify-between animate-fade-in">
                     <label class="font-medium"><?php echo esc_html($label); ?></label>
@@ -410,7 +499,7 @@ function github_card_render_admin_page()
                 $input = $all_input_settings[$key];
                 $label = $input['label'];
                 $placeholder = $input['placeholder'] ?? '';
-                $cache_duration = get_option($key, $defaults[$key]);
+                $cache_duration = github_card_cache_duration(other_input_dependency: false)
                 ?>
                 <div class="flex items-center justify-between animate-fade-in" data-condition="cache-enabled-on">
                     <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
