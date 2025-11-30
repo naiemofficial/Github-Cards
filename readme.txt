@@ -26,6 +26,7 @@ Cards can load using PHP or JavaScript, support shortcode integration, customiza
 - Skeleton or spinner preloaders
 - Color customization options
 - Language bar showing language percentage colors
+- Caching for improved performance
 
 == Settings Page ==
 - Choose PHP or JavaScript loading method  
@@ -34,6 +35,7 @@ Cards can load using PHP or JavaScript, support shortcode integration, customiza
 - Auto-scaling support based on container width  
 - Enable/disable language bar  
 - Customize card colors, spinner color, skeleton background, wrapper preloader color, and language bar colors  
+- Cache Enable/disable and set cache duration
 
 == Shortcode Usage ==
 
@@ -66,6 +68,13 @@ issues="false"
 stars="false"
 forks="false"
 ]
+
+
+### Custom Avatar/Logo for repo card
+[github_card repo="naiemofficial/Github-Cards" avatar="https://example.com/custom-avatar.png"]
+Sets a custom avatar/logo image URL instead of the default GitHub owner avatar.
+- false - Hides the avatar.
+- url - Uses the provided URL as the avatar image.
 
 
 ### Limit Description Words

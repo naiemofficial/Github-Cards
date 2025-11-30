@@ -1,11 +1,52 @@
 <?php
+// ------------------ START - Clear Cache -----------------
+function github_card_clear_cache_ajax(){
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error('Unauthorized');
+    }
+    check_ajax_referer('github_card_admin', 'nonce');
+
+    $result = github_card_clear_cache(); // 0, 1, 1+
+    if ($result === false) {
+        wp_send_json_error('Failed to clear cache');
+    } else {
+        wp_send_json_success("Cleared $result cached items");
+    }
+}
+add_action('wp_ajax_github_card_clear_cache', 'github_card_clear_cache_ajax');
+// ------------------ END - Clear Cache -----------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ------------------ START - Admin AJAX Handlers -----------------
 function github_card_save_settings_ajax(){
     if (!current_user_can('manage_options')) {
         wp_send_json_error('Unauthorized');
     }
 
-    check_ajax_referer('github_card_save_settings', 'nonce');
+    check_ajax_referer('github_card_admin', 'nonce');
+
+    if (!isset($_POST['data'])) {
+        wp_send_json_error('No data received');
+    }
+
+    if ($_POST['action'] !== 'github_card_save_settings') {
+        wp_send_json_error('Invalid action');
+    }
+
     parse_str($_POST['data'], $form_data);
     foreach ($form_data as $key => $value) {
         if (strpos($key, 'github_card_') === 0) {
@@ -25,7 +66,16 @@ function github_card_reset_settings_ajax(){
         wp_send_json_error('Unauthorized');
     }
 
-    check_ajax_referer('github_card_save_settings', 'nonce');
+    check_ajax_referer('github_card_admin', 'nonce');
+
+    if (!isset($_POST['data'])) {
+        wp_send_json_error('No data received');
+    }
+
+    
+
+
+
     parse_str($_POST['data'], $form_data);
 
     foreach ($form_data as $key => $value) {

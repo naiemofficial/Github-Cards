@@ -19,9 +19,24 @@ function fn_github_card_template($atts)
     $reponame = isset($exploded_repo[1]) ? $exploded_repo[1] : '';
     $repolink = "https://github.com/" . $username . "/" . $reponame;
 
+    // Card 
+    $uid = 'github-card-' . uniqid();
+    $card_height = isset($atts['height']) && is_numeric($atts['height']) && intval($atts['height']) > 0 ? intval($atts['height']) : null;
+    $card_width = isset($atts['width']) && is_numeric($atts['width']) && intval($atts['width']) > 0 ? intval($atts['width']) : null;
+    $default_height = github_card_height();
+    $default_width = github_card_width();
+    $has_changed_dimensions = false;
+    if((!empty($card_height) && $card_height !== $default_height) || (!empty($card_width) && $card_width !== $default_width)){
+        $has_changed_dimensions = true;
+    }
+
 
     // Shortcode Parameters
     $show_avatar = !isset($atts['avatar']) || $atts['avatar'] !== 'false';
+    $avatar_is_url = isset($atts['avatar']) && filter_var($atts['avatar'], FILTER_VALIDATE_URL);
+    $avatar_url = $avatar_is_url ? esc_url($atts['avatar']) : $default_avatar;
+    
+
     $description_words = isset($atts['description-words']) ? intval($atts['description-words']) : -1;
     $show_description = !isset($atts['description']) || $atts['description'] !== 'false';
     $show_contributors = !isset($atts['contributors']) || $atts['contributors'] !== 'false';
@@ -32,6 +47,9 @@ function fn_github_card_template($atts)
     $paratmeters = [
         'description-words' => $description_words
     ];
+    if ($avatar_is_url) {
+        $paratmeters['avatar-url'] = $avatar_url;
+    }
 
 
     $error = false;
@@ -42,7 +60,6 @@ function fn_github_card_template($atts)
 
     if ($is_loaded_via_php) {
         $repo_data = full_github_repo_data($atts);
-        // var_dump($repo_data);
         if (is_wp_error($repo_data) && github_card_error()) {
             $error = true;
             $error_text = json_encode($repo_data);
@@ -50,7 +67,7 @@ function fn_github_card_template($atts)
         $description = get_or_null($repo_data, 'description');
 
         $user = get_or_null($repo_data, 'user');
-        $user_avatar_url = get_or_null($user, 'avatar_url');
+        $user_avatar_url = $avatar_is_url ? $avatar_url : get_or_null($user, 'avatar_url');
 
         $contributors = get_or_null($repo_data, 'contributors');
         $issues = get_or_null($repo_data, 'all_issues');
@@ -63,6 +80,7 @@ function fn_github_card_template($atts)
 ?>
 
     <div class="github-card-wrapper"
+        data-uid="<?php echo esc_attr($uid); ?>"
         <?php if (isset($atts['repo']) && !empty($atts['repo'])): ?>
         data-github-repo="<?php echo esc_attr($atts['repo']); ?>"
         <?php endif; ?>
@@ -239,11 +257,12 @@ function fn_github_card_template($atts)
                 <?php if (github_card_footer_ribbon()) { ?>
                     <div
                         <?php if (github_card_language_ribbon()): ?>
-                        <?php if ($is_loaded_via_php && isset($color_gradient) && !empty($color_gradient)) { ?>
-                        style="background: <?php echo esc_attr($color_gradient); ?>;"
-                        <?php } else if ($is_loaded_via_js) { ?>
-                        data-active="true"
-                        <?php } ?>
+                            data-language="true"
+                            <?php if ($is_loaded_via_php && isset($color_gradient) && !empty($color_gradient)) { ?>
+                            style="background: <?php echo esc_attr($color_gradient); ?>;"
+                            <?php } else if ($is_loaded_via_js) { ?>
+                            data-active="true"
+                            <?php } ?>
                         <?php endif; ?>
                         class="language-ribbon <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                     </div>
@@ -252,6 +271,18 @@ function fn_github_card_template($atts)
                 <?php } ?>
             </div>
         </div>
+        <?php if ($has_changed_dimensions): ?>
+            <style>
+                .github-card-wrapper[data-uid="<?php echo esc_attr($uid); ?>"] .github-card {
+                    <?php if (!empty($card_height)) { ?>
+                        height: <?php echo intval($card_height); ?>px;
+                    <?php } ?>
+                    <?php if (!empty($card_width)) { ?>
+                        width: <?php echo intval($card_width); ?>px;
+                    <?php } ?>
+                }
+            </style>
+        <?php endif; ?>
     </div>
 
 <?php

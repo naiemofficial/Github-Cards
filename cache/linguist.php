@@ -6,7 +6,7 @@ require_once plugin_dir_path(__FILE__) . '../api/linguist.php';
 
 
 function get_github_linguist_cached() {
-    $cache_key = 'github_linguist';
+    $cache_key = 'github_card_linguist';
 
     // Check if cached
     $cache_enabled = github_card_cache_enabled();

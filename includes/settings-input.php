@@ -34,6 +34,22 @@ return [
         'groups' => ['card-settings'],
     ],
 
+    'github_card_height'       => [
+        'type' => 'number',
+        'label' => 'Height',
+        'placeholder' => 'Pixels',
+        'default' => 600,
+        'groups' => ['card-settings'],
+    ],
+
+    'github_card_width'       => [
+        'type' => 'number',
+        'label' => 'Width',
+        'placeholder' => 'Pixels',
+        'default' => 1200,
+        'groups' => ['card-settings'],
+    ],
+
     'github_card_auto_scale'       => [
         'type' => 'checkbox',
         'label' => 'Enable Auto Scale',
@@ -172,6 +188,21 @@ return [
         'label' => 'Cache Duration (seconds)',
         'placeholder' => 'Seconds',
         'default' => 3600,
+        'groups' => ['cache-settings'],
+    ],
+    'github_card_clear_cache'      => [
+        'type' => 'button',
+        'default' => '',
+        'label' => 'Clear Cache',
+        'description' => 'Click to clear all cached GitHub data',
+        'action' => 'github_card_clear_cache',
+        'icons' => [
+            'default' => 'fa-trash-alt',
+            'loading' => 'fa-spinner fa-spin',
+            'success' => 'fa-check',
+            'error' => 'fa-exclamation-triangle',
+        ],
+        'text' => 'Clear Cache',
         'groups' => ['cache-settings'],
     ],
 ];

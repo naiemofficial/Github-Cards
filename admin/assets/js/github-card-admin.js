@@ -153,9 +153,65 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-// AJAX Save Settings
-jQuery(document).ready(function ($) {
 
+jQuery(document).ready(function ($) {
+    // AJAX Clear Cache of Github Cards
+    $("#github_card_clear_cache").on("click", function (e) {
+        e.preventDefault();
+
+        const $btn = $(this);
+        const id = $btn.attr("id");
+
+        const $icon_default = $btn.find(".gc-icon-default");
+        const $icon_loading = $btn.find(".gc-icon-loading");
+        const $icon_success = $btn.find(".gc-icon-success");
+        const $icon_error = $btn.find(".gc-icon-error");
+
+        // Step 1: Switch to loading
+        $icon_default.hide();
+        $icon_success.hide();
+        $icon_error.hide();
+        $icon_loading.show();
+
+        const text = $btn.find(".gc-btn-text");
+        const defaultText = text.text();
+        text.text($btn.data("loading"));  
+
+        const formData = {
+            action: id,
+            nonce: githubCardAjax.nonce
+        };
+
+        $.post(githubCardAjax.ajax_url, formData, function (response) {
+
+            // Stop loading spinner
+            $icon_loading.hide();
+            text.text(defaultText);
+
+            if (response.success) {
+                // Step 2: Show tick/checkmark
+                $icon_success.show();
+                text.text($btn.data("success"));
+
+                // Step 3: After 2 seconds return to default icon
+                setTimeout(() => {
+                    $icon_success.hide();
+                    $icon_default.show();
+                    text.text(defaultText);
+                }, 2000);
+
+            } else {
+                // Handle error
+                $icon_error.show();
+                text.text($btn.data("error"));
+            }
+        });
+    });
+
+
+
+    
+    // AJAX Save Settings
     $(".github-card-admin-settings button").on("click", function (e) {
         e.preventDefault();
 

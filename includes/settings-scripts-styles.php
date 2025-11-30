@@ -51,6 +51,8 @@ if (github_card_load_with('js')) {
 
                 const parameters = JSON.parse(repoCard.dataset.parameters || '{}');
                 const description_words = parameters['description-words'] || -1;
+                const avatar_is_url = parameters['avatar-url'] && /^https?:\/\/.+/.test(parameters['avatar-url']);
+                const avatar_url = avatar_is_url ? parameters['avatar-url'] : null;
 
 
                 const descriptionElement = repoCard.querySelector('p[data-repo-description]');
@@ -72,7 +74,7 @@ if (github_card_load_with('js')) {
                             const $description = get_or_null($repo_data, 'description');
 
                             const $user = get_or_null($repo_data, 'user');
-                            const $user_avatar_url = get_or_null($user, 'avatar_url');
+                            const $user_avatar_url = avatar_is_url ? avatar_url : get_or_null($user, 'avatar_url');
 
                             const $contributors = get_or_null($repo_data, 'contributors');
                             const $issues = get_or_null($repo_data, 'all_issues');
@@ -211,6 +213,8 @@ if (github_card_load_with('js')) {
 <?php
 // --------------------------------------- START - Auto Scale -------------------------------------- 
 if (github_card_auto_scale()):
+$card_height = github_card_height();
+$card_width = github_card_width();
 ?>
     <style type="text/css">
         /* Scale */
@@ -221,18 +225,20 @@ if (github_card_auto_scale()):
             overflow: hidden;
 
             /* Set the max width to match original 1200px design */
-            max-width: 1200px;
+            max-width: <?php echo !empty($card_width) ? intval($card_width) : '1200'; ?>px;
         }
 
         /* SCALE the card based on available wrapper width */
         .github-card-wrapper .github-card {
             transform-origin: top left;
+            width: <?php echo !empty($card_width) ? intval($card_width) : '1200'; ?>px;
+            height: <?php echo !empty($card_height) ? intval($card_height) : '600'; ?>px;
         }
 
         @media (max-width: 1200px) {
             .github-card-wrapper .github-card {
-                transform: scale(calc(min(1, 100vw / 1200px)));
-                width: 1200px;
+                transform: scale(calc(min(1, 100vw / <?php echo !empty($card_width) ? intval($card_width) : '1200'; ?>px)));
+                width: <?php echo !empty($card_width) ? intval($card_width) : '1200'; ?>px;
                 /* keep original width for scale calculation */
                 height: auto;
             }
@@ -241,8 +247,8 @@ if (github_card_auto_scale()):
 
     <script type="text/javascript">
         (function() {
-            const originalWidth = 1200;
-            const originalHeight = 600;
+            const originalWidth = Number(<?php echo !empty($card_width) ? intval($card_width) : '1200'; ?>);
+            const originalHeight = Number(<?php echo !empty($card_height) ? intval($card_height) : '600'; ?>);
 
             function scaleCard(wrapper) {
                 const card = wrapper.querySelector(".github-card");
@@ -312,7 +318,7 @@ if (github_card_auto_scale()):
 
 
 <?php
-// ------------------------------- START - Wrapper Preloader ------------------------------
+// ------------------------------- START - Styles ------------------------------
 $spinner_color = github_card_preloader_spinner_color();
 $preloader_background_color = github_card_preloader_background_color();
 $backdrop_enabled = github_card_enable_preloader_blur();
@@ -346,12 +352,10 @@ $skeleton_secondary_color = github_card_skeleton_secondary_color();
     <?php endif; ?>
 
     /* Footer Ribbon Color */
-    <?php
-    if (!empty(github_card_footer_ribbon_color())) {
-    ?>.github-card .github-card-footer .language-ribbon {
+    <?php if (!empty(github_card_footer_ribbon_color())) { ?>.github-card .github-card-footer .language-ribbon {
         background: <?php echo github_card_footer_ribbon_color(); ?>;
     }
 
     <?php } ?>
 </style>
-<?php /*------------------------------- END - Auto Scale ------------------------------------- */ ?>
+<?php /*------------------------------- END - Styles ------------------------------------- */ ?>

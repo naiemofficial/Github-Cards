@@ -89,6 +89,18 @@ function github_card_data_preloader($other_input_dependency = true) {
     return filter_var(get_option($key, $defaults[$key]), FILTER_VALIDATE_BOOLEAN);
 }
 
+function github_card_width($other_input_dependency = true) {
+    global $defaults;
+    $key = 'github_card_width';
+    return get_option($key, $defaults[$key]);
+}
+
+function github_card_height($other_input_dependency = true) {
+    global $defaults;
+    $key = 'github_card_height';
+    return get_option($key, $defaults[$key]);
+}
+
 function github_card_auto_scale($other_input_dependency = true) {
     global $defaults;
     $key = 'github_card_auto_scale';

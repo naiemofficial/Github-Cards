@@ -16,7 +16,7 @@ require_once plugin_dir_path(__FILE__).'../api/repo.php';
 
 // Get GitHub repo repo_data with caching
 function get_github_repo_data_cached($repo_full) {
-    $transient_key = 'github_repo_data_' . md5($repo_full);
+    $transient_key = 'github_card_repo_data_' . md5($repo_full);
 
     // Check if cached
     $cache_enabled = github_card_cache_enabled();

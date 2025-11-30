@@ -6,7 +6,7 @@ require_once plugin_dir_path(__FILE__) . '../api/user.php';
 
 
 function get_github_user_data_cached($username) {
-    $transient_key = 'github_user_' . md5($username);
+    $transient_key = 'github_card_user_' . md5($username);
 
     // Check if cached
     $cache_enabled = github_card_cache_enabled();

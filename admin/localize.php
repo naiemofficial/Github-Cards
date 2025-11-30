@@ -41,7 +41,7 @@ function github_card_admin_style_scripts($hook){
 
         wp_localize_script('github-card-admin-script', 'githubCardAjax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('github_card_save_settings'),
+            'nonce'    => wp_create_nonce('github_card_admin'),
         ]);
 
 

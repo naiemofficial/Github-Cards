@@ -178,24 +178,64 @@ function github_card_render_admin_page()
 
 
 
-                <!-- Auto Scale -->
-                <?php
-                $key = 'github_card_auto_scale';
-                $input = $all_input_settings[$key];
-                $label = $input['label'];
-                $description = $input['description'];
-                $value = github_card_auto_scale(other_input_dependency: false);
-                ?>
-                <div class="p-4 rounded-lg border border-white flex items-center justify-between animate-fade-in-up">
-                    <div>
-                        <label class="font-medium"><?php echo esc_html($label); ?></label>
-                        <p><?php echo $description; ?></p>
+                <!-- Width X Height -->
+                <div class="flex flex-col space-y-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div class="flex items-center justify-between animate-fade-in-up">
+                        <div>
+                            <label class="font-medium">Card Dimensions</label>
+                        </div>
+                        <div class="inline-flex flex-row items-center gap-4">
+                            <?php
+                            $key = 'github_card_width';
+                            $input = $all_input_settings[$key];
+                            $label = $input['label'];
+                            $placeholder = $input['placeholder'];
+                            $value = github_card_width(other_input_dependency: false);
+                            ?>
+                            <div class="inline-flex flex-col items-center gap-1">
+                                <label class="mr-2 font-medium"><?php echo esc_html($label); ?></label>
+                                <input type="number" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" min="200" placeholder="<?php echo esc_attr($placeholder); ?>" class="border rounded-lg px-3 py-2 w-24 focus:ring-[#141414] focus:border-[#141414]" />
+                            </div>
+
+                            x
+
+                            <?php
+                            $key = 'github_card_height';
+                            $input = $all_input_settings[$key];
+                            $label = $input['label'];
+                            $placeholder = $input['placeholder'];
+                            $value = github_card_height(other_input_dependency: false);
+                            ?>
+                            <div class="inline-flex flex-col items-center gap-1">
+                                <label class="mr-2 font-medium"><?php echo esc_html($label); ?></label>
+                                <input type="number" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" min="100" placeholder="<?php echo esc_attr($placeholder); ?>" class="border rounded-lg px-3 py-2 w-24 focus:ring-[#141414] focus:border-[#141414]" />
+                            </div>
+                        </div>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointe checkbox-label m-0">
-                        <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($value); ?> />
-                        <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
-                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
-                    </label>
+                
+                
+
+
+
+                    <!-- Auto Scale -->
+                    <?php
+                    $key = 'github_card_auto_scale';
+                    $input = $all_input_settings[$key];
+                    $label = $input['label'];
+                    $description = $input['description'];
+                    $value = github_card_auto_scale(other_input_dependency: false);
+                    ?>
+                    <div class="flex items-center justify-between animate-fade-in-up">
+                        <div>
+                            <label class="font-medium"><?php echo esc_html($label); ?></label>
+                            <p><?php echo $description; ?></p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointe checkbox-label m-0">
+                            <input type="checkbox" name="<?php echo esc_attr($key); ?>" value="on" class="sr-only peer" <?php checked($value); ?> />
+                            <div class="w-10 h-6 bg-white border border-gray-300 rounded-full transition-colors duration-300 peer-checked"></div>
+                            <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 peer-checked"></span>
+                        </label>
+                    </div>
                 </div>
 
 
@@ -504,6 +544,39 @@ function github_card_render_admin_page()
                 <div class="flex items-center justify-between animate-fade-in" data-condition="cache-enabled-on">
                     <label class="block font-medium mb-2"><?php echo esc_html($label); ?></label>
                     <input type="number" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($cache_duration); ?>" min="1" placeholder="<?php echo $placeholder; ?>" class="border rounded-lg px-3 py-2 w-32 focus:ring-[#141414] focus:border-[#141414]">
+                </div>
+
+
+                <?php
+                $key = 'github_card_clear_cache';
+                $input = $all_input_settings[$key];
+                $type = $input['type'];
+                $label = $input['label'];
+                $description = $input['description'];
+                $action = $input['action'];
+                $icons = $input['icons']; // default, loading, success, error
+                $text = $input['text'];
+                ?>
+                <div class="flex items-center justify-between animate-fade-in" data-condition="cache-enabled-on">
+                    <div>
+                        <label class="font-medium"><?php echo esc_html($label); ?></label>
+                        <p class="text-small"><?php echo esc_html($description); ?></p>
+                    </div>
+                    <div>
+                        <button
+                            type="button"
+                            id="<?php echo esc_attr($key); ?>"
+                            class="border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 github-card-admin-button clear-github-card-cache"
+                            data-action="<?php echo esc_attr($action); ?>"
+                            data-loading="<?php esc_attr_e('Clearing...'); ?>"
+                            data-success="<?php esc_attr_e('Cleared!'); ?>">
+                            <i class="fa-solid <?php echo esc_attr($icons['default']); ?> gc-icon-default"></i>
+                            <i class="fa-solid <?php echo esc_attr($icons['loading']); ?> gc-icon-loading" style="display:none;"></i>
+                            <i class="fa-solid <?php echo esc_attr($icons['success']); ?> gc-icon-success" style="display:none; color:#2ecc71;"></i>
+                            <i class="fa-solid <?php echo esc_attr($icons['error']); ?> gc-icon-error" style="display:none; color:#e74c3c;"></i>
+                            <span class="gc-btn-text"><?php echo esc_html($text); ?></span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
