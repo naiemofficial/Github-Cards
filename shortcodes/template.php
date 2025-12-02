@@ -39,7 +39,7 @@ function fn_github_card_template($atts)
         $reponame = str_replace('-', ' ', $reponame);
     }
 
-    
+
     $show_avatar = !isset($atts['avatar']) || $atts['avatar'] !== 'false';
     $avatar_is_url = isset($atts['avatar']) && filter_var($atts['avatar'], FILTER_VALIDATE_URL);
     $avatar_url = $avatar_is_url ? esc_url($atts['avatar']) : $default_avatar;
@@ -103,13 +103,7 @@ function fn_github_card_template($atts)
                 <div class="github-card-title">
                     <h3 class="repo-title <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                         <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
-                            <?php if ($show_username): ?>
-                                <?php echo $username; ?>
-                            <?php endif; ?>
-                            <?php if ($show_slash): ?>
-                                /
-                            <?php endif; ?>
-                            <strong><?php echo $reponame; ?></strong>
+                            <?php if ($show_username): ?><?php echo $username; ?><?php endif; ?><?php if ($show_slash): ?>/<?php endif; ?><strong><?php echo $reponame; ?></strong>
                         </a>
                     </h3>
                     <?php if ($show_description): ?>
