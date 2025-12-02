@@ -51,12 +51,16 @@ https://gh-card.dev/repos/naiemofficial/Github-Cards.svg
 ### Hide Elements
 Each component can be shown/hidden:
 
-- avatar="true|false"
-- description="true|false"
-- contributors="true|false"
-- issues="true|false"
-- stars="true|false"
-- forks="true|false"
+- username="true|false" default: true
+- slash="true|false" default: true
+- dash="true|false" default: true
+- avatar="true|false" default: true
+- description="true|false" default: true
+- contributors="true|false" default: true
+- issues="true|false" default: true
+- stars="true|false" default: true
+- forks="true|false" default: true
+
 
 Example:
 [github_card

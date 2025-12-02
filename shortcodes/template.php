@@ -32,10 +32,17 @@ function fn_github_card_template($atts)
 
 
     // Shortcode Parameters
+    $show_username = !isset($atts['username']) || $atts['username'] !== 'false';
+    $show_slash = !isset($atts['slash']) || $atts['slash'] !== 'false';
+    $show_dash = !isset($atts['dash']) || $atts['dash'] !== 'false';
+    if (!$show_dash) {
+        $reponame = str_replace('-', ' ', $reponame);
+    }
+
+    
     $show_avatar = !isset($atts['avatar']) || $atts['avatar'] !== 'false';
     $avatar_is_url = isset($atts['avatar']) && filter_var($atts['avatar'], FILTER_VALIDATE_URL);
     $avatar_url = $avatar_is_url ? esc_url($atts['avatar']) : $default_avatar;
-    
 
     $description_words = isset($atts['description-words']) ? intval($atts['description-words']) : -1;
     $show_description = !isset($atts['description']) || $atts['description'] !== 'false';
@@ -96,7 +103,13 @@ function fn_github_card_template($atts)
                 <div class="github-card-title">
                     <h3 class="repo-title <?php echo $is_skeleton ? $skeleton_class : ''; ?>">
                         <a href="<?php echo $repolink; ?>" target="_blank" rel="noopener noreferrer">
-                            <?php echo $username; ?>/<strong><?php echo $reponame; ?></strong>
+                            <?php if ($show_username): ?>
+                                <?php echo $username; ?>
+                            <?php endif; ?>
+                            <?php if ($show_slash): ?>
+                                /
+                            <?php endif; ?>
+                            <strong><?php echo $reponame; ?></strong>
                         </a>
                     </h3>
                     <?php if ($show_description): ?>
